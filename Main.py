@@ -13,7 +13,7 @@ def crea_grafi():
     lista_archi = []
     lista_adj = {}
     
-    f = open("algoritmi-avanzati-laboratorio/mst_dataset/input_random_01_10.txt", "r")
+    f = open("algoritmi-avanzati-laboratorio/mst_dataset/input_random_68_100000.txt", "r")
 
     #creo il primo grafo di prova
     prima_riga = f.readline().split(" ")
@@ -68,7 +68,7 @@ def crea_grafi():
                 lista_adj.setdefault(nodo_temp, [])     #imposto come chiave il nodo e come valore una lista
                 lista_adj[nodo_temp].append(arco_temp)  #aggiungo l'arco alla lista degli archi del nodo chiave
                 
-        else:       #primo nodo
+        else:           #primo nodo
                 arco_temp = Arco(lista_valori[i][0], lista_valori[i][1], int(lista_valori[i][2]))
                 nodo_temp = Nodo(lista_valori[i][0], [arco_temp])
                     
@@ -80,8 +80,10 @@ def crea_grafi():
 
         
     ################### test ###################
-    #TODO
-    
+    #for key, value in grafo_1.lista_adiacenza.items():
+        #for i in range(0, len(value)):
+            #print("nodo "+ key.nodo + ": (" + value[i].nodo1 +", "+ value[i].nodo2 + ") peso: "+ str(value[i].peso) )
+    print("fine")   
 
 crea_grafi()
 
