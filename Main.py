@@ -15,9 +15,24 @@ def check_nodi(lista_grafi):
     return nodi
 
 
+#controllo archi
+def check_archi(lista_grafi):
+    for grafo in lista_grafi:
+        numero_archi = 0
+        for nodo in grafo.lista_adiacenza.keys():
+            numero_archi += len(grafo.lista_adiacenza[nodo])
+            archi = numero_archi/2 == int(grafo.n_archi)
+    return archi
+
+
+
 def check_generale():
     print("numero grafi = " + str(len(lista_grafi)))
-    print("i nodi corrispondono in ogni grafo? " + str(check_nodi(lista_grafi)))
+    print("Il numero di nodi è giusto in ogni grafo? " + str(check_nodi(lista_grafi)))
+    print("Il numero di archi è giusto in ogni grafo? " + str(check_archi(lista_grafi)))
+    #controllo numr
+    
+
 
 
 def parsing():
