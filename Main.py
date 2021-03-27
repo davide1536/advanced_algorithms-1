@@ -1,6 +1,7 @@
 from Grafo import Grafo
 from Nodo import Nodo
 from Arco import Arco
+from UnionFind import UnionFind
 import os
 import math
 
@@ -40,15 +41,8 @@ def check_generale():
 def parsing():
     global directory
     for file in os.listdir(directory):
-        if file == "input_random_08_20.txt":
+        if file == "input_random_01_10.txt":
             crea_grafi(file)
-
-
-
-#funzione di servizio per fornire arco come lista di 3 valori
-#  [nodo1, nodo2, peso]
-def getArco(arco):
-    return [arco.nod1, arco.nodo2, arco.peso]
 
 
 
@@ -156,7 +150,7 @@ def merge(array, p, q, r):
         j += 1
         k += 1
 
-    
+
 
 def mergeSort(array, p, r):
     if p < r:
@@ -167,11 +161,12 @@ def mergeSort(array, p, r):
         
 
 
+#def unionFind():
+
 
 
 parsing()
-for k,v in lista_grafi[0].lista_adiacenza_nodi.items():
-    print(k,v)
 
-
-
+for k,v in lista_grafi[0].lista_adiacenza.items():
+    for arco in v:
+        print(k + " : "+ "( " + arco.nodo1 + ", " + arco.nodo2 + ", " + str(arco.peso) + ")")

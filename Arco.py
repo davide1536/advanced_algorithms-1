@@ -3,4 +3,9 @@ class Arco:
         self.nodo1 = nodo1
         self.nodo2 = nodo2
         self.peso = peso
+
+    def getArco(self):
+        return [self.nodo1, self.nodo2, self.peso]
+    
+    
         
