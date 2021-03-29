@@ -4,6 +4,7 @@ from Arco import Arco
 from UnionFind import UnionFind
 import os
 import math
+from heap import heap
 
 
 directory = "algoritmi-avanzati-laboratorio/mst_dataset"
