@@ -10,6 +10,7 @@
     #MinHeapInsert(h, key) --> h= heap, key = nuovo valore da aggiungere all'heap, dato un oggetto heap aggiungo un nuovo valore key
     #HeapMinimum(h) --> ottengo il valore minimo dell'heap
     #HeapExtractMin(h) --> recupera il valore minimo dall'heap e eliminalo
+from Nodo import Nodo
 class heap:
     def __init__(self, vector):
         self.vector = vector
@@ -18,18 +19,17 @@ class heap:
 
 def BuildMinHeap(h):
     for i in range (h.length//2-1, -1, -1):
-        print(i)
         MinHeapify(h, i)
 
 def MinHeapify (h, i):
     l = left(i)
     r = right(i)
     minimum = i
-    if l <= h.heapsize-1 and h.vector[l] < h.vector[i]:
+    if l <= h.heapsize-1 and h.vector[l].rank < h.vector[i].rank:
         minimum = l
     else:
         minimum = i
-    if r <= h.heapsize-1 and h.vector[r] < h.vector[minimum]:
+    if r <= h.heapsize-1 and h.vector[r].rank < h.vector[minimum].rank:
         minimum = r
     if minimum != i:
         temp = h.vector[i]
@@ -38,19 +38,19 @@ def MinHeapify (h, i):
         return MinHeapify(h,minimum)
 
 def HeapDecreasKey(h, i, key):
-    if key > h.vector[i]:
+    if key > h.vector[i].rank:
         exit("la nuova chiave è più grande di quella corrente")
-    h.vector[i] = key
-    while i>0 and h.vector[parent(i)] > h.vector[i]:
+    h.vector[i].rank = key
+    while i>0 and h.vector[parent(i)].rank > h.vector[i].rank:
         temp = h.vector[i]
         h.vector[i] = h.vector[parent(i)]
         h.vector[parent(i)] = temp
         i = parent(i)
 
-def MinHeapInsert(h, key):
-    h.heapsize = h.heapsize+1
-    h.vector.insert(h.heapsize-1, float('inf')) #il valore più piccolo di tutti
-    HeapDecreasKey(h, h.heapsize-1, key)
+# def MinHeapInsert(h, key):
+#     h.heapsize = h.heapsize+1
+#     h.vector.insert(h.heapsize-1, Nodofloat('inf')) #il valore più piccolo di tutti
+#     HeapDecreasKey(h, h.heapsize-1, key)
 
 
 def HeapMinimum(h):
@@ -73,6 +73,39 @@ def left(index):
 
 def parent(index):
     return (index-1)//2 
+nodes =[
+Nodo(1, 2, 4),
+Nodo(2, 3, 10),
+Nodo(3, 1, 7),
+Nodo(4, 1, 2),
+Nodo(5, 2, 1)
+]
+
+h = heap(nodes)
+print(h.heapsize, h.length)
+for i in range (h.heapsize):
+    print("nodi iniziali; ",h.vector[i].nodo)
+
+BuildMinHeap(h)
+
+print("\n")
+
+for i in range (h.heapsize):
+    print("nodi finali:", h.vector[i].nodo, h.vector[i].rank)
 
 
+HeapDecreasKey(h, 2, 0)
+
+print("\n")
+
+for i in range (h.heapsize):
+    print("nodo modificato:", h.vector[i].nodo, h.vector[i].rank)
+
+print(HeapMinimum(h).rank, HeapMinimum(h).nodo)
+print(HeapExtractMin(h))
+
+print("\n")
+
+for i in range (h.heapsize):
+    print("estrazione nodo:", h.vector[i].nodo, h.vector[i].rank)
 

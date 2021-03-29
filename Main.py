@@ -5,6 +5,7 @@ from UnionFind import UnionFind
 from heap import heap
 import os
 import math
+from heap import heap
 
 
 directory = "algoritmi-avanzati-laboratorio/mst_dataset"
