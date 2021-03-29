@@ -2,39 +2,13 @@ from Grafo import Grafo
 from Nodo import Nodo
 from Arco import Arco
 from UnionFind import UnionFind
+from heap import heap
 import os
 import math
 
 
 directory = "algoritmi-avanzati-laboratorio/mst_dataset"
 lista_grafi = []
-
-
-#controllo nodi
-def check_nodi(lista_grafi):
-    for grafo in lista_grafi:
-        nodi = len(grafo.lista_nodi) == int(grafo.n_nodi)
-    return nodi
-
-
-
-#controllo archi
-def check_archi(lista_grafi):
-    for grafo in lista_grafi:
-        numero_archi = 0
-        for nodo in grafo.lista_adiacenza.keys():
-            numero_archi += len(grafo.lista_adiacenza[nodo])
-            archi = numero_archi/2 == int(grafo.n_archi)
-    return archi
-
-
-
-def check_generale():
-    print("numero grafi = " + str(len(lista_grafi)))
-    print("Il numero di nodi è giusto in ogni grafo? " + str(check_nodi(lista_grafi)))
-    print("Il numero di archi è giusto in ogni grafo? " + str(check_archi(lista_grafi)))
-    #controllo numr
-
 
 
 #per fare testing ho messo solo il grafo 8_20
@@ -45,10 +19,12 @@ def parsing():
             crea_grafi(file)
 
 
-
+#funzione che dato un path, aggiunge un oggetto grafo 
+#alla lista lista_grafi
 def crea_grafi(path):
 
     global lista_grafi
+    id2Node = {}
     lista_nodi = set()
     lista_archi = []
     lista_adiacenza = {}
@@ -78,23 +54,23 @@ def crea_grafi(path):
         nodo_2 = lista_valori[i][1]
         peso = lista_valori[i][2]
         arco_1 = Arco(nodo_1, nodo_2, peso)
-        arco_2 = Arco(nodo_2, nodo_1, peso)
+        #arco_2 = Arco(nodo_2, nodo_1, peso)
         
         lista_nodi.add(nodo_1)
         lista_nodi.add(nodo_2)
         lista_adiacenza.setdefault(nodo_1, [])    #inzializzo ogni chiave nodo a un valore list
         lista_adiacenza.setdefault(nodo_2, [])    #inzializzo ogni chiave nodo a un valore list
-        lista_adiacenza_nodi.setdefault(nodo_1, [])    
-        lista_adiacenza_nodi.setdefault(nodo_2, [])    
+        lista_adiacenza_nodi.setdefault(nodo_1, [])
+        lista_adiacenza_nodi.setdefault(nodo_2, [])
 
         #forse non serve una lista archi
         lista_archi.append(arco_1)
-        lista_archi.append(arco_2)
+        #lista_archi.append(arco_2)
     
-    #for nodo in lista_nodi:
+    for nodo in lista_nodi:
         #se serve un oggetto nodo, crearlo qui!!!!
-        #obj_nodo = Nodo(nodo, altri_attributi)
-        #lista_adiacenza.setdefault(nodo, [])    #inzializzo ogni chiave nodo a un valore list
+        obj_nodo = Nodo(nodo)
+        id2Node[obj_nodo.nodo] = obj_nodo
 
 
     for i in range(0, len(lista_valori)):
@@ -106,11 +82,10 @@ def crea_grafi(path):
         lista_adiacenza[nodo_1].append(Arco(nodo_1, nodo_2, peso))      #arco(u,v)
         lista_adiacenza[nodo_2].append(Arco(nodo_2, nodo_1, peso))      #arco(v,u)
 
-    lista_grafi.append(Grafo(n_nodi, n_archi, lista_nodi, lista_archi, lista_adiacenza, lista_adiacenza_nodi))
+    lista_grafi.append(Grafo(n_nodi, n_archi, lista_nodi, lista_archi, id2Node, lista_adiacenza, lista_adiacenza_nodi))
 
 
-
-#algoritmo merge
+# algoritmo merge modificato per confrontare i pesi degli archi, data una lista archi
 # p, q, r sono indici dell'array tali che p <= q < r
 # gli indici dividono l'array in sottosequenze t.c. A[p..q] A[q+1..r] 
 def merge(array, p, q, r):
@@ -131,7 +106,7 @@ def merge(array, p, q, r):
     j = 0
     k = p
     while i < n1 and j < n2:
-        if left[i] <= right[j]:
+        if left[i].peso <= right[j].peso:
             array[k] = left[i]
             i += 1
         else:
@@ -151,22 +126,20 @@ def merge(array, p, q, r):
         k += 1
 
 
-
-def mergeSort(array, p, r):
+def mergeSort_weight(array, p, r):
     if p < r:
         q = (p+r)//2
-        mergeSort(array, p, q)
-        mergeSort(array, q+1, r)
+        mergeSort_weight(array, p, q)
+        mergeSort_weight(array, q+1, r)
         merge(array, p, q, r)
+
+
+
+
+
+
         
 
-
-#def unionFind():
-
-
-
 parsing()
-
-for k,v in lista_grafi[0].lista_adiacenza.items():
-    for arco in v:
-        print(k + " : "+ "( " + arco.nodo1 + ", " + arco.nodo2 + ", " + str(arco.peso) + ")")
+#print(len(lista_grafi))
+#print("fine")

@@ -1,5 +1,6 @@
 #classe utile per la Union-Find
 #capitolo 21.3/4 del libro
+################# non testato #################
 from Nodo import Nodo
 
 class UnionFind:

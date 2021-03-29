@@ -1,10 +1,12 @@
 from Arco import Arco
+from Nodo import Nodo
 class Grafo:
-    def __init__(self, n_nodi, n_archi, lista_nodi, lista_archi, lista_adiacenza, lista_adiacenza_nodi):
+    def __init__(self, n_nodi, n_archi, lista_nodi, lista_archi, id2Node, lista_adiacenza, lista_adiacenza_nodi):
         self.n_nodi = n_nodi
         self.n_archi = n_archi
         self.lista_nodi = lista_nodi
         self.lista_archi = lista_archi
+        self.id2Node = id2Node
         self.lista_adiacenza = lista_adiacenza #dizionario key: nodo, value: lista archi del nodo
         self.lista_adiacenza_nodi = lista_adiacenza_nodi #dizionario key: nodo, value: lista nodi adiacenti
     
@@ -25,4 +27,8 @@ class Grafo:
             
             self.lista_adiacenza_nodi[arco.getNodo2()].append(nodo) #aggiungo il nuovo nodo alla lista dei vicini del nodo2
             self.lista_adiacenza_nodi[nodo].append(arco.getNodo2()) #agginugno il nodo2 alla lista dei vicini del nuovo nodo
+    
+    #restituisce l'oggetto noto, dato l'id 
+    def getNodo(self, id_nodo):
+        return self.id2Node[id_nodo]
     
