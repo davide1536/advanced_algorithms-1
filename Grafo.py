@@ -31,4 +31,7 @@ class Grafo:
     #restituisce l'oggetto noto, dato l'id 
     def getNodo(self, id_nodo):
         return self.id2Node[id_nodo]
+
+    def getListaNodi(self):
+        return list(self.id2Node.values())
     

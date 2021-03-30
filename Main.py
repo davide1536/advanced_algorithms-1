@@ -5,10 +5,10 @@ from UnionFind import UnionFind
 from heap import heap
 import os
 import math
-from heap import heap
+from heap import*
 
 
-directory = "algoritmi-avanzati-laboratorio/mst_dataset"
+directory = "mst_dataset/"
 lista_grafi = []
 
 
@@ -16,7 +16,7 @@ lista_grafi = []
 def parsing():
     global directory
     for file in os.listdir(directory):
-        if file == "input_random_01_10.txt":
+        if file == "input_random_03_10.txt":
             crea_grafi(file)
 
 
@@ -31,7 +31,7 @@ def crea_grafi(path):
     lista_adiacenza = {}
     lista_adiacenza_nodi = {}
     
-    f = open("algoritmi-avanzati-laboratorio/mst_dataset/" + path, "r")
+    f = open("mst_dataset/" + path, "r")
 
     #creo il primo grafo di prova
     prima_riga = f.readline().split(" ")
@@ -78,10 +78,10 @@ def crea_grafi(path):
         nodo_1 = lista_valori[i][0]
         nodo_2 = lista_valori[i][1]
         peso = lista_valori[i][2]
-        lista_adiacenza_nodi[nodo_1].append(nodo_2)
-        lista_adiacenza_nodi[nodo_2].append(nodo_1)
+        lista_adiacenza_nodi[nodo_1].append(id2Node[nodo_2])
+        lista_adiacenza_nodi[nodo_2].append(id2Node[nodo_1])
         lista_adiacenza[nodo_1].append(Arco(nodo_1, nodo_2, peso))      #arco(u,v)
-        lista_adiacenza[nodo_2].append(Arco(nodo_2, nodo_1, peso))      #arco(v,u)
+        #lista_adiacenza[nodo_2].append(Arco(nodo_2, nodo_1, peso))      #arco(v,u)
 
     lista_grafi.append(Grafo(n_nodi, n_archi, lista_nodi, lista_archi, id2Node, lista_adiacenza, lista_adiacenza_nodi))
 
@@ -135,6 +135,27 @@ def mergeSort_weight(array, p, r):
         merge(array, p, q, r)
 
 
+def prim(g, radice):
+    radice.padre = radice.nodo
+    for nodo in g.getListaNodi():
+        nodo.key = float('inf')  #float('inf') indica un valore superiore a qualsiasi altro valore
+    radice.key = 0
+    q = heap(g.getListaNodi())
+    BuildMinHeap(q)
+    while q.heapsize != 0:
+        u = HeapExtractMin(q)
+        print("estraggo il nodo ", u.nodo)
+        for v in g.lista_adiacenza_nodi.get(u.nodo): #per ogni nodo v adiacente a u
+            for arco in g.lista_adiacenza.get(u.nodo): #cerco l'arco (u,v) tra gli archi adiacenti di u
+                if arco.nodo2 == v.nodo:
+                    uv = arco 
+            if isIn(q,v) == 1 and uv.peso < v.key:
+                print ("aggiorno il nodo:", v.nodo)
+                v.padre = u.nodo
+                print ("il padre di", v.nodo, "è ", u.nodo)
+                v.key = arco.peso
+                print ("la key di ", v.nodo, "è", v.key, "\n ")
+                MinHeapify(q, g.getListaNodi().index(v)) 
 
 
 
@@ -142,5 +163,38 @@ def mergeSort_weight(array, p, r):
         
 
 parsing()
+print(lista_grafi[0].id2Node.keys())
+for nodo in lista_grafi[0].lista_adiacenza.keys():
+    for v in lista_grafi[0].lista_adiacenza[nodo]:
+        print("nodo: "+ nodo, "arco" + str(v.getArco()))
+        
+prim(lista_grafi[0], lista_grafi[0].getNodo('1'))
+# for nodo in lista_grafi[0].id2Node.values():
+#     print("sono il nodo: ", nodo.nodo, "il mio padre è: ",nodo.padre)
+
 #print(len(lista_grafi))
 #print("fine")
+##################################PROVA GRAFO PRIM#################################
+# nodes =[
+# Nodo(1, None, None, None),
+# Nodo(2, None, None, None),
+# Nodo(3, None, None, None),
+# Nodo(4, None, None , None),
+# ]
+
+# lista_adiacenza = {}
+# for i in range (len(nodes)):
+#     lista_adiacenza[i+1] = nodes[i]
+
+# arches = [
+# Arco(1,2,1),
+# Arco(2,1,1),
+# Arco(1,3,4),
+# Arco(3,1,4),
+# Arco(1,4,3),
+# Arco(4,1,3),
+# Arco(2,4,2),
+# Arco(4,2,2),
+# Arco(3,4,5),
+# Arco(4,3,5),
+# ]
