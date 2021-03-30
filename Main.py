@@ -81,7 +81,7 @@ def crea_grafi(path):
         lista_adiacenza_nodi[nodo_1].append(id2Node[nodo_2])
         lista_adiacenza_nodi[nodo_2].append(id2Node[nodo_1])
         lista_adiacenza[nodo_1].append(Arco(nodo_1, nodo_2, peso))      #arco(u,v)
-        #lista_adiacenza[nodo_2].append(Arco(nodo_2, nodo_1, peso))      #arco(v,u)
+        lista_adiacenza[nodo_2].append(Arco(nodo_2, nodo_1, peso))      #arco(v,u)
 
     lista_grafi.append(Grafo(n_nodi, n_archi, lista_nodi, lista_archi, id2Node, lista_adiacenza, lista_adiacenza_nodi))
 
@@ -147,15 +147,15 @@ def prim(g, radice):
         print("estraggo il nodo ", u.nodo)
         for v in g.lista_adiacenza_nodi.get(u.nodo): #per ogni nodo v adiacente a u
             for arco in g.lista_adiacenza.get(u.nodo): #cerco l'arco (u,v) tra gli archi adiacenti di u
-                if arco.nodo2 == v.nodo:
-                    uv = arco 
+                if arco.nodo2 == v.nodo or arco.nodo1 == v.nodo:
+                    uv = arco
             if isIn(q,v) == 1 and uv.peso < v.key:
                 print ("aggiorno il nodo:", v.nodo)
                 v.padre = u.nodo
                 print ("il padre di", v.nodo, "è ", u.nodo)
-                v.key = arco.peso
+                v.key = uv.peso
                 print ("la key di ", v.nodo, "è", v.key, "\n ")
-                MinHeapify(q, g.getListaNodi().index(v)) 
+                HeapDecreasKey(q, q.vector.index(v), v.key)
 
 
 
@@ -163,10 +163,15 @@ def prim(g, radice):
         
 
 parsing()
-print(lista_grafi[0].id2Node.keys())
-for nodo in lista_grafi[0].lista_adiacenza.keys():
-    for v in lista_grafi[0].lista_adiacenza[nodo]:
-        print("nodo: "+ nodo, "arco" + str(v.getArco()))
+for nodo in lista_grafi[0].getListaNodi():
+    print (nodo.nodo)
+print ("\n")
+print(lista_grafi[0].getListaNodi().index(lista_grafi[0].getNodo('2')))
+
+# for nodo in lista_grafi[0].lista_adiacenza_nodi['1']:
+#     print(nodo.nodo)    
+# for v in lista_grafi[0].lista_adiacenza['1']:
+#     print("arco" + str(v.getArco()))
         
 prim(lista_grafi[0], lista_grafi[0].getNodo('1'))
 # for nodo in lista_grafi[0].id2Node.values():
