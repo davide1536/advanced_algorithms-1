@@ -7,5 +7,4 @@ class Arco:
     def getArco(self):
         return [self.nodo1, self.nodo2, self.peso]
     
-    
         

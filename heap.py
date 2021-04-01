@@ -37,7 +37,7 @@ def MinHeapify (h, i):
         h.vector[minimum] = temp
         return MinHeapify(h,minimum)
 
-def HeapDecreasKey(h, i, key):
+def HeapDecreaseKey(h, i, key):
     if key > h.vector[i].key:
         exit("la nuova chiave è più grande di quella corrente")
     h.vector[i].key = key

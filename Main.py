@@ -2,13 +2,15 @@ from Grafo import Grafo
 from Nodo import Nodo
 from Arco import Arco
 from UnionFind import UnionFind
-from heap import heap
+from heap import *
+import random
 import os
 import math
-from heap import*
 
 
-directory = "mst_dataset/"
+per_m = "algoritmi-avanzati-laboratorio/"
+#togliere per_m
+directory = per_m+"mst_dataset/"
 lista_grafi = []
 
 
@@ -17,6 +19,7 @@ def parsing():
     global directory
     for file in os.listdir(directory):
         if file == "input_random_03_10.txt":
+            
             crea_grafi(file)
 
 
@@ -31,7 +34,7 @@ def crea_grafi(path):
     lista_adiacenza = {}
     lista_adiacenza_nodi = {}
     
-    f = open("mst_dataset/" + path, "r")
+    f = open(per_m+"mst_dataset/" + path, "r")
 
     #creo il primo grafo di prova
     prima_riga = f.readline().split(" ")
@@ -83,6 +86,7 @@ def crea_grafi(path):
         lista_adiacenza[nodo_1].append(Arco(nodo_1, nodo_2, peso))      #arco(u,v)
         lista_adiacenza[nodo_2].append(Arco(nodo_2, nodo_1, peso))      #arco(v,u)
 
+    
     lista_grafi.append(Grafo(n_nodi, n_archi, lista_nodi, lista_archi, id2Node, lista_adiacenza, lista_adiacenza_nodi))
 
 
@@ -155,30 +159,42 @@ def prim(g, radice):
                 print ("il padre di", v.nodo, "è ", u.nodo)
                 v.key = uv.peso
                 print ("la key di ", v.nodo, "è", v.key, "\n ")
-                HeapDecreasKey(q, q.vector.index(v), v.key)
+                HeapDecreaseKey(q, q.vector.index(v), v.key)
+
+
+def prim2(g, radice):
+    radice.padre = radice.nodo
+    for nodo in g.getListaNodi():
+        nodo.key = float('inf')  #float('inf') indica un valore superiore a qualsiasi altro valore
+    radice.key = 0
+    q = heap(g.getListaNodi())
+    BuildMinHeap(q)
+    while q.heapsize != 0:
+        u = HeapExtractMin(q)
+        for arco in g.lista_adiacenza[u.nodo]:       #per ogni arco, in lista di adiacenza di u
+            nodo_adj = g.getNodo(arco.nodo2)    #g.getNodo(arco.nodo2) = (oggetto) nodo adiacente a u
+            if isIn(q,nodo_adj) == 1 and arco.peso < nodo_adj.key:
+                nodo_adj.padre = u.nodo
+                nodo_adj.key = arco.peso
+                HeapDecreaseKey(q, q.vector.index(nodo_adj), nodo_adj.key)
 
 
 
 
-        
+######################## MAIN ########################
 
 parsing()
+
+#for i in range(0, lista_grafi):
+#    nodo_casuale = random.randint(1 , len(lista_grafi[i].lista_nodo)-1)
+#    prim2(lista_grafi[i], lista_grafi[i].getNodo(nodo_casuale))
+
+
 for nodo in lista_grafi[0].getListaNodi():
-    print (nodo.nodo)
-print ("\n")
-print(lista_grafi[0].getListaNodi().index(lista_grafi[0].getNodo('2')))
+    print(nodo.padre +" è padre di "+ nodo.nodo)
 
-# for nodo in lista_grafi[0].lista_adiacenza_nodi['1']:
-#     print(nodo.nodo)    
-# for v in lista_grafi[0].lista_adiacenza['1']:
-#     print("arco" + str(v.getArco()))
-        
-prim(lista_grafi[0], lista_grafi[0].getNodo('1'))
-# for nodo in lista_grafi[0].id2Node.values():
-#     print("sono il nodo: ", nodo.nodo, "il mio padre è: ",nodo.padre)
 
-#print(len(lista_grafi))
-#print("fine")
+
 ##################################PROVA GRAFO PRIM#################################
 # nodes =[
 # Nodo(1, None, None, None),
