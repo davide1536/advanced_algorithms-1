@@ -6,10 +6,17 @@ from Utility import merge, mergeSort_weight
 import random
 import os
 import math
+from random import seed
+from random import randint
+import gc
+from time import perf_counter
+from collections import defaultdict
+import collections
+import matplotlib.pyplot as plt
 
 
-per_m = "algoritmi-avanzati-laboratorio/"
-#per_m = ""
+#per_m = "algoritmi-avanzati-laboratorio/"
+per_m = ""
 #togliere per_m
 directory = per_m+"mst_dataset/"
 lista_grafi = []
@@ -89,6 +96,25 @@ def crea_grafi(path):
     
     lista_grafi.append(Grafo(n_nodi, n_archi, lista_nodi, lista_archi, id2Node, lista_adiacenza, lista_adiacenza_nodi))
 
+def measure_run_time(n_instances, graphs, algorithm):
+    sum_times = 0
+    for i in range (n_instances):
+        if algorithm == "prim":
+            gc.disable()
+            nodo_casuale = next(iter(graphs[i].lista_nodi))    #casuale perchè il set lista_nodi cambia ordine ad ogni parsing
+            start_time = perf_counter()
+            prim2(graphs[i],graphs[i].getNodo(nodo_casuale))
+            end_time = perf_counter()
+            gc.enable()
+            sum_times += end_time - start_time
+
+        if algorithm == "NaiveKruskal":
+            pass
+        if algorithm == "Kruskal":
+            pass
+    avg_time = sum_times / n_instances
+    return avg_time
+
 
 
 def prim(g, radice):
@@ -140,11 +166,32 @@ def prim2(g, radice):
 
 parsing()
 print("FINE PARSING")
-for i in range(0, len(lista_grafi)):
-    nodo_casuale = next(iter(lista_grafi[i].lista_nodi))    #casuale perchè il set lista_nodi cambia ordine ad ogni parsing
-    mst = prim2(lista_grafi[i], lista_grafi[i].getNodo(nodo_casuale))
-    print("grafo con: "+ str(len(mst.lista_nodi)) + " nodi" )
-print("FINE Prim")
+graphs_groupped = defaultdict(list)
+#raggruppo i grafi in base alla dimensione dei loro nodi con un dizionario key:n_nodi, value: grafi con quel numero di nodi        
+for i in range (len(lista_grafi)):
+    graphs_groupped[int(lista_grafi[i].n_nodi)].append(lista_grafi[i])
+
+#ordino il dizionario in base alla key (numero di nodi)
+graphs_groupped = collections.OrderedDict(sorted(graphs_groupped.items()))
+#prendo i tempi
+times = []
+for key in graphs_groupped:
+    print("il grafo con ", key, "nodi ci ha messo (in media):")
+    time = measure_run_time(len(graphs_groupped[key]), graphs_groupped[key], "prim")
+    print (time, "secondi")
+    times.append(time)
+
+#grafico dei tempi
+plt.plot(graphs_groupped.keys(), times)
+plt.ylabel('run time (seconds)')
+plt.xlabel('size')
+plt.show()
+
+# for i in range(0, len(lista_grafi)):
+#     nodo_casuale = next(iter(lista_grafi[i].lista_nodi))    #casuale perchè il set lista_nodi cambia ordine ad ogni parsing
+#     mst = prim2(lista_grafi[i], lista_grafi[i].getNodo(nodo_casuale))
+#     print("grafo con: "+ str(len(mst.lista_nodi)) + " nodi" )
+# print("FINE Prim")
 
 
 
