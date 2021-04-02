@@ -63,12 +63,12 @@ def HeapExtractMin(h):
     h.vector[0] = h.vector[h.heapsize-1]
     h.heapsize = h.heapsize - 1
     MinHeapify(h, 0)
+    minimum.in_h = 0
     return minimum
 
 def isIn(h, v):
-    for i in range (h.heapsize):
-        if h.vector[i].nodo == v.nodo:
-            return 1
+    if v.in_h == 1:
+        return 1
     return 0
 
 def right(index):

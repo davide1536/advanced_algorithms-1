@@ -34,4 +34,8 @@ class Grafo:
 
     def getListaNodi(self):
         return list(self.id2Node.values())
+
+    def getPadreFiglio(self):
+        for nodo in self.id2Node.values():
+            print(nodo.padre +" è padre di "+ nodo.nodo)
     

@@ -1,14 +1,15 @@
 from Grafo import Grafo
 from Nodo import Nodo
 from Arco import Arco
-from UnionFind import UnionFind
-from heap import *
+from heap import heap, HeapDecreaseKey, HeapExtractMin, HeapMinimum, BuildMinHeap, isIn
+from Utility import merge, mergeSort_weight
 import random
 import os
 import math
 
 
 per_m = "algoritmi-avanzati-laboratorio/"
+#per_m = ""
 #togliere per_m
 directory = per_m+"mst_dataset/"
 lista_grafi = []
@@ -18,8 +19,7 @@ lista_grafi = []
 def parsing():
     global directory
     for file in os.listdir(directory):
-        if file == "input_random_03_10.txt":
-            
+        #if file == "input_random_03_10.txt":    
             crea_grafi(file)
 
 
@@ -90,54 +90,6 @@ def crea_grafi(path):
     lista_grafi.append(Grafo(n_nodi, n_archi, lista_nodi, lista_archi, id2Node, lista_adiacenza, lista_adiacenza_nodi))
 
 
-# algoritmo merge modificato per confrontare i pesi degli archi, data una lista archi
-# p, q, r sono indici dell'array tali che p <= q < r
-# gli indici dividono l'array in sottosequenze t.c. A[p..q] A[q+1..r] 
-def merge(array, p, q, r):
-    #lunghezza sottoarray A[p..q]
-    n1 = q-p+1
-    #lunghezza sottoarray A[q+1..r]
-    n2 = r-q
-    left = [0] * n1
-    right = [0] * n2
-    
-    for i in range(0, n1):
-        left[i] = array[p+i]
-    
-    for i in range(0, n2):
-        right[i] = array[q+i+1]
-    
-    i = 0
-    j = 0
-    k = p
-    while i < n1 and j < n2:
-        if left[i].peso <= right[j].peso:
-            array[k] = left[i]
-            i += 1
-        else:
-            array[k] = right[j]
-            j += 1
-        k += 1
-    #elementi rimanenri di left e right
-    #non sono riuscito ad implementarlo con il valore infito del libro :(
-    while i < n1:
-        array[k] = left[i]
-        i += 1
-        k += 1
-
-    while j < n2:
-        array[k] = right[j]
-        j += 1
-        k += 1
-
-
-def mergeSort_weight(array, p, r):
-    if p < r:
-        q = (p+r)//2
-        mergeSort_weight(array, p, q)
-        mergeSort_weight(array, q+1, r)
-        merge(array, p, q, r)
-
 
 def prim(g, radice):
     radice.padre = radice.nodo
@@ -162,21 +114,24 @@ def prim(g, radice):
                 HeapDecreaseKey(q, q.vector.index(v), v.key)
 
 
+
 def prim2(g, radice):
     radice.padre = radice.nodo
-    for nodo in g.getListaNodi():
+    lista_nodi_obj = g.getListaNodi()
+    for nodo in lista_nodi_obj:
         nodo.key = float('inf')  #float('inf') indica un valore superiore a qualsiasi altro valore
     radice.key = 0
-    q = heap(g.getListaNodi())
+    q = heap(lista_nodi_obj)
     BuildMinHeap(q)
     while q.heapsize != 0:
         u = HeapExtractMin(q)
-        for arco in g.lista_adiacenza[u.nodo]:       #per ogni arco, in lista di adiacenza di u
-            nodo_adj = g.getNodo(arco.nodo2)    #g.getNodo(arco.nodo2) = (oggetto) nodo adiacente a u
+        for arco in g.lista_adiacenza[u.nodo]:      #per ogni arco, in lista di adiacenza di u
+            nodo_adj = g.getNodo(arco.nodo2)        #g.getNodo(arco.nodo2) = (oggetto) nodo adiacente a u
             if isIn(q,nodo_adj) == 1 and arco.peso < nodo_adj.key:
                 nodo_adj.padre = u.nodo
                 nodo_adj.key = arco.peso
                 HeapDecreaseKey(q, q.vector.index(nodo_adj), nodo_adj.key)
+    return g
 
 
 
@@ -184,14 +139,13 @@ def prim2(g, radice):
 ######################## MAIN ########################
 
 parsing()
+print("FINE PARSING")
+for i in range(0, len(lista_grafi)):
+    nodo_casuale = next(iter(lista_grafi[i].lista_nodi))    #casuale perchè il set lista_nodi cambia ordine ad ogni parsing
+    mst = prim2(lista_grafi[i], lista_grafi[i].getNodo(nodo_casuale))
+    print("grafo con: "+ str(len(mst.lista_nodi)) + " nodi" )
+print("FINE Prim")
 
-#for i in range(0, lista_grafi):
-#    nodo_casuale = random.randint(1 , len(lista_grafi[i].lista_nodo)-1)
-#    prim2(lista_grafi[i], lista_grafi[i].getNodo(nodo_casuale))
-
-
-for nodo in lista_grafi[0].getListaNodi():
-    print(nodo.padre +" è padre di "+ nodo.nodo)
 
 
 
