@@ -54,6 +54,14 @@ def mergeSort_weight(array, p, r):
         mergeSort_weight(array, q+1, r)
         merge(array, p, q, r)
 
+# Complessità O(n)
+# - se G non ha un ciclo allora G è un albero ed m = n-1
+# - se G ha un ciclo allora dopo aver attraversato al più n archi la procedura termina 
+#   (viene scoperto un arco all'indietro)
+#
+# INPUT : 
+# OUTPUT : 
+#def dfs_ciclo():
 
 
 ################# Union-Find #################

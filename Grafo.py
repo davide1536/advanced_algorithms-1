@@ -1,7 +1,7 @@
 from Arco import Arco
 from Nodo import Nodo
 class Grafo:
-    def __init__(self, n_nodi, n_archi, lista_nodi, lista_archi, id2Node, lista_adiacenza, lista_adiacenza_nodi):
+    def __init__(self, n_nodi = 0, n_archi = 0, lista_nodi = set(), lista_archi = [], id2Node = {}, lista_adiacenza = {}, lista_adiacenza_nodi = {}):
         self.n_nodi = n_nodi
         self.n_archi = n_archi
         self.lista_nodi = lista_nodi
@@ -11,7 +11,7 @@ class Grafo:
         self.lista_adiacenza_nodi = lista_adiacenza_nodi #dizionario key: nodo, value: lista nodi adiacenti
     
 
-    def addNodo(self, nodo, archi):
+    def aggiungiNodo(self, nodo, archi):
         self.n_nodi += 1
         self.lista_nodi.add(nodo)
         self.lista_adiacenza.setdefault(nodo, []) #inizializzo il valore del nuovo nodo a lista 
@@ -27,15 +27,18 @@ class Grafo:
             
             self.lista_adiacenza_nodi[arco.getNodo2()].append(nodo) #aggiungo il nuovo nodo alla lista dei vicini del nodo2
             self.lista_adiacenza_nodi[nodo].append(arco.getNodo2()) #agginugno il nodo2 alla lista dei vicini del nuovo nodo
+
     
     #restituisce l'oggetto noto, dato l'id 
     def getNodo(self, id_nodo):
         return self.id2Node[id_nodo]
 
+    #restituisce la lista di oggetti nodi di un grafo
     def getListaNodi(self):
         return list(self.id2Node.values())
 
+    #mostra vettore dei padri
     def getPadreFiglio(self):
         for nodo in self.id2Node.values():
-            print(nodo.padre +" è padre di "+ nodo.nodo)
+            print(nodo.padre + " è padre di " + nodo.nodo)
     

@@ -9,14 +9,14 @@ import math
 from random import seed
 from random import randint
 import gc
-from time import perf_counter
+from time import perf_counter_ns
 from collections import defaultdict
 import collections
 import matplotlib.pyplot as plt
 
 
-#per_m = "algoritmi-avanzati-laboratorio/"
-per_m = ""
+per_m = "algoritmi-avanzati-laboratorio/"
+#per_m = ""
 #togliere per_m
 directory = per_m+"mst_dataset/"
 lista_grafi = []
@@ -26,8 +26,9 @@ lista_grafi = []
 def parsing():
     global directory
     for file in os.listdir(directory):
-        #if file == "input_random_03_10.txt":    
+        if not (file.endswith("100000.txt") or file.endswith("80000.txt") or file.endswith("40000.txt") or file.endswith("20000.txt")):
             crea_grafi(file)
+
 
 
 #funzione che dato un path, aggiunge un oggetto grafo 
@@ -96,15 +97,18 @@ def crea_grafi(path):
     
     lista_grafi.append(Grafo(n_nodi, n_archi, lista_nodi, lista_archi, id2Node, lista_adiacenza, lista_adiacenza_nodi))
 
+
+
+
 def measure_run_time(n_instances, graphs, algorithm):
     sum_times = 0
-    for i in range (n_instances):
+    for i in range(n_instances):
         if algorithm == "prim":
             gc.disable()
             nodo_casuale = next(iter(graphs[i].lista_nodi))    #casuale perchè il set lista_nodi cambia ordine ad ogni parsing
-            start_time = perf_counter()
-            prim2(graphs[i],graphs[i].getNodo(nodo_casuale))
-            end_time = perf_counter()
+            start_time = perf_counter_ns()
+            prim(graphs[i],graphs[i].getNodo(nodo_casuale))
+            end_time = perf_counter_ns()
             gc.enable()
             sum_times += end_time - start_time
 
@@ -112,36 +116,57 @@ def measure_run_time(n_instances, graphs, algorithm):
             pass
         if algorithm == "Kruskal":
             pass
-    avg_time = sum_times / n_instances
+    avg_time = round((sum_times / n_instances)//1000, 3) #millisecondi
     return avg_time
 
 
 
+
+def plot_graph():
+    graphs_groupped = defaultdict(list)
+    
+    #raggruppo i grafi in base alla dimensione dei loro nodi con un dizionario key:n_nodi, value: grafi con quel numero di nodi        
+    for i in range (len(lista_grafi)):
+        graphs_groupped[int(lista_grafi[i].n_nodi)].append(lista_grafi[i])
+
+    #ordino il dizionario in base alla key (numero di nodi)
+    graphs_groupped = collections.OrderedDict(sorted(graphs_groupped.items()))
+
+    #prendo i tempi
+    times = [measure_run_time(len(graphs_groupped[key]), graphs_groupped[key], "prim") for key in graphs_groupped]
+
+    #grandezza gruppi
+    sizes = [key for key in graphs_groupped]
+
+    #calcolo ratios e costant
+    ratios = [None] + [round(times[i+1]/times[i],3) for i in range(len(sizes)-1)]
+    c_estimates = [round(times[i]/sizes[i],3) for i in range(len(sizes))]
+
+    print("Size\t\ttTime(ms)\t\tCostant\t\tRatio")
+    print(65*"-")
+    for i in range(len(sizes)):
+        if i < 10:
+            print(sizes[i], '' , times[i], '', '', c_estimates[i], '', ratios[i], sep="\t")
+        else:
+            print(sizes[i], '', times[i], '', c_estimates[i], '', ratios[i], sep="\t")
+    print(65*"-")
+
+
+    #for key in graphs_groupped:
+        #print("il grafo con ", key, "nodi ci ha messo (in media):")
+        #time = measure_run_time(len(graphs_groupped[key]), graphs_groupped[key], "prim")
+        #print (time, "secondi")
+        #times.append(time)
+
+    #grafico dei tempi
+    plt.plot(graphs_groupped.keys(), times)
+    plt.ylabel('run time(ns)')
+    plt.xlabel('size')
+    plt.show()
+
+
+
 def prim(g, radice):
-    radice.padre = radice.nodo
-    for nodo in g.getListaNodi():
-        nodo.key = float('inf')  #float('inf') indica un valore superiore a qualsiasi altro valore
-    radice.key = 0
-    q = heap(g.getListaNodi())
-    BuildMinHeap(q)
-    while q.heapsize != 0:
-        u = HeapExtractMin(q)
-        print("estraggo il nodo ", u.nodo)
-        for v in g.lista_adiacenza_nodi.get(u.nodo): #per ogni nodo v adiacente a u
-            for arco in g.lista_adiacenza.get(u.nodo): #cerco l'arco (u,v) tra gli archi adiacenti di u
-                if arco.nodo2 == v.nodo or arco.nodo1 == v.nodo:
-                    uv = arco
-            if isIn(q,v) == 1 and uv.peso < v.key:
-                print ("aggiorno il nodo:", v.nodo)
-                v.padre = u.nodo
-                print ("il padre di", v.nodo, "è ", u.nodo)
-                v.key = uv.peso
-                print ("la key di ", v.nodo, "è", v.key, "\n ")
-                HeapDecreaseKey(q, q.vector.index(v), v.key)
-
-
-
-def prim2(g, radice):
     radice.padre = radice.nodo
     lista_nodi_obj = g.getListaNodi()
     for nodo in lista_nodi_obj:
@@ -160,32 +185,18 @@ def prim2(g, radice):
     return g
 
 
+def naiveKruskal(g):
+    grafo_mst = Grafo()
+    mergeSort_weight(g.lista_archi, 0, len(g.lista_archi))
+
 
 
 ######################## MAIN ########################
 
 parsing()
 print("FINE PARSING")
-graphs_groupped = defaultdict(list)
-#raggruppo i grafi in base alla dimensione dei loro nodi con un dizionario key:n_nodi, value: grafi con quel numero di nodi        
-for i in range (len(lista_grafi)):
-    graphs_groupped[int(lista_grafi[i].n_nodi)].append(lista_grafi[i])
-
-#ordino il dizionario in base alla key (numero di nodi)
-graphs_groupped = collections.OrderedDict(sorted(graphs_groupped.items()))
-#prendo i tempi
-times = []
-for key in graphs_groupped:
-    print("il grafo con ", key, "nodi ci ha messo (in media):")
-    time = measure_run_time(len(graphs_groupped[key]), graphs_groupped[key], "prim")
-    print (time, "secondi")
-    times.append(time)
-
-#grafico dei tempi
-plt.plot(graphs_groupped.keys(), times)
-plt.ylabel('run time (seconds)')
-plt.xlabel('size')
-plt.show()
+plot_graph()
+print("fine esecuzione")
 
 # for i in range(0, len(lista_grafi)):
 #     nodo_casuale = next(iter(lista_grafi[i].lista_nodi))    #casuale perchè il set lista_nodi cambia ordine ad ogni parsing
