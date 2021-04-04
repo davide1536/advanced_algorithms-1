@@ -6,5 +6,8 @@ class Arco:
 
     def getArco(self):
         return [self.nodo1, self.nodo2, self.peso]
+
+    def getArcoInverso(self):
+        return Arco(self.nodo2, self.nodo1, self.peso)
     
         

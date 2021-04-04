@@ -2,7 +2,7 @@ from Grafo import Grafo
 from Nodo import Nodo
 from Arco import Arco
 from heap import heap, HeapDecreaseKey, HeapExtractMin, HeapMinimum, BuildMinHeap, isIn
-from Utility import merge, mergeSort_weight
+from Utility import merge, mergeSort_weight, dfs_ciclo, inizializzaGrafo
 import random
 import os
 import math
@@ -22,11 +22,12 @@ directory = per_m+"mst_dataset/"
 lista_grafi = []
 
 
-#per fare testing ho messo solo il grafo 8_20
+
 def parsing():
     global directory
     for file in os.listdir(directory):
-        if not (file.endswith("100000.txt") or file.endswith("80000.txt") or file.endswith("40000.txt") or file.endswith("20000.txt")):
+        #if not (file.endswith("100000.txt") or file.endswith("80000.txt") or file.endswith("40000.txt") or file.endswith("20000.txt")):
+        if file.endswith("03_10.txt"):
             crea_grafi(file)
 
 
@@ -166,6 +167,7 @@ def plot_graph():
 
 
 
+
 def prim(g, radice):
     radice.padre = radice.nodo
     lista_nodi_obj = g.getListaNodi()
@@ -185,49 +187,77 @@ def prim(g, radice):
     return g
 
 
+
+# NOTA IMPORTANTE
+# durante la costruzione del mst si potrebbero formare sottografi non connessi tra loro
+# tuttavia non è necessario eseguire la dfs_ciclo per ognuno dei sottografi non connessi
+# infatti, se al passo n il grafo non presenta cicli, al passo n+1, facendo iniziare la visita dfs
+# dal nodo (o da uno dei nodi) dell'arco aggiunto, questa compirà una visita completa del sottografo connesso
+# il quale è appunto l'unico che al passo n+1 potrebbe contenere un ciclo.
 def naiveKruskal(g):
     grafo_mst = Grafo()
-    mergeSort_weight(g.lista_archi, 0, len(g.lista_archi))
+    prova_mst = Grafo()
+
+    mergeSort_weight(g.lista_archi, 0, len(g.lista_archi)-1)
+    
+    inizializzaGrafo(prova_mst, g)
+    inizializzaGrafo(grafo_mst, g)
+    
+    for arco in g.lista_archi:
+        prova_mst.lista_adiacenza_nodi[arco.nodo1].append(prova_mst.getNodo(arco.nodo2))
+        prova_mst.lista_adiacenza_nodi[arco.nodo2].append(prova_mst.getNodo(arco.nodo1))
+        
+    if not dfs_ciclo(prova_mst, g.getNodo(arco.nodo2)):
+            grafo_mst.aggiungiArco(arco)
+
+    else:
+        prova_mst.lista_adiacenza_nodi[arco.nodo1].remove(prova_mst.getNodo(arco.nodo2))
+        prova_mst.lista_adiacenza_nodi[arco.nodo2].remove(prova_mst.getNodo(arco.nodo1))
+    
+    return grafo_mst
+
+
 
 
 
 ######################## MAIN ########################
 
 parsing()
-print("FINE PARSING")
-plot_graph()
-print("fine esecuzione")
+#print("FINE PARSING")
+#plot_graph()
+#print("fine esecuzione")
 
-# for i in range(0, len(lista_grafi)):
-#     nodo_casuale = next(iter(lista_grafi[i].lista_nodi))    #casuale perchè il set lista_nodi cambia ordine ad ogni parsing
-#     mst = prim2(lista_grafi[i], lista_grafi[i].getNodo(nodo_casuale))
-#     print("grafo con: "+ str(len(mst.lista_nodi)) + " nodi" )
-# print("FINE Prim")
+g1 = naiveKruskal(lista_grafi[0])
+for i in g1.lista_adiacenza_nodi.keys():
+    print(i, [nodo.nodo for nodo in g1.lista_adiacenza_nodi[i]])
+
+print("-"*30)
+
+""" g2 = prim(lista_grafi[0], lista_grafi[0].getNodo("6"))
+#print(g2.getPadreFiglio())
+
+for i in g1.lista_adiacenza_nodi.keys():
+    print(i, [nodo.nodo for nodo in g2.lista_adiacenza_nodi[i]])
+
+#print(lista_grafi[0].lista_adiacenza_nodi['3']) """
 
 
 
 
-##################################PROVA GRAFO PRIM#################################
-# nodes =[
-# Nodo(1, None, None, None),
-# Nodo(2, None, None, None),
-# Nodo(3, None, None, None),
-# Nodo(4, None, None , None),
-# ]
 
-# lista_adiacenza = {}
-# for i in range (len(nodes)):
-#     lista_adiacenza[i+1] = nodes[i]
 
-# arches = [
-# Arco(1,2,1),
-# Arco(2,1,1),
-# Arco(1,3,4),
-# Arco(3,1,4),
-# Arco(1,4,3),
-# Arco(4,1,3),
-# Arco(2,4,2),
-# Arco(4,2,2),
-# Arco(3,4,5),
-# Arco(4,3,5),
-# ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
