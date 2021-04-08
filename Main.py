@@ -238,7 +238,7 @@ def naiveKruskal(g):
     return grafo_mst
 
 
-#non funziona
+#non funziona 
 def kruskal(g):
     grafo_mst = Grafo()
     prova_mst = Grafo()
@@ -251,10 +251,16 @@ def kruskal(g):
     grafo_mst = copy.deepcopy(prova_mst)
 
     for arco in g.lista_archi:
+        prova_mst.lista_adiacenza_nodi[arco.nodo1].append(prova_mst.getNodo(arco.nodo2))
+        prova_mst.lista_adiacenza_nodi[arco.nodo2].append(prova_mst.getNodo(arco.nodo1))
 
         if findSet(g, g.getNodo(arco.nodo1)) != findSet(g, g.getNodo(arco.nodo2)):
-            #grafo_mst.aggiungiArco(arco)
+            grafo_mst.aggiungiArco(arco)
             union(g.getNodo(arco.nodo1), g.getNodo(arco.nodo2))
+        
+        else:
+            prova_mst.lista_adiacenza_nodi[arco.nodo1].remove(prova_mst.getNodo(arco.nodo2))
+            prova_mst.lista_adiacenza_nodi[arco.nodo2].remove(prova_mst.getNodo(arco.nodo1))
         
     return grafo_mst
 
@@ -292,13 +298,14 @@ print(checkMst(lista_adiacenza, g1.lista_adiacenza_nodi))
 
 
 ############### KRUSKAL #############
+#non funziona
 print("-"*30)
 print()
 print("KRUSKAL")
 print()
 g3 = kruskal(lista_grafi[0])
-l3 = g3.getPadreFiglio()
-for nodo in l3:
-    print("i nodi adiacenti di",nodo, "sono", [nodo.nodo for nodo in l3[nodo]] )
+g3.printAdj()
+
+print(checkMst(g3.lista_adiacenza_nodi, g1.lista_adiacenza_nodi))
 
 print("-"*30)

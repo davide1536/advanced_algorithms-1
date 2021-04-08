@@ -98,6 +98,8 @@ def equals(l1, l2):
     l2 = [nodo.nodo for nodo in l2]
     l1.sort()
     l2.sort()
+    if l1 != l2:
+        print(l1,l2)
     return l1 == l2
 
 
