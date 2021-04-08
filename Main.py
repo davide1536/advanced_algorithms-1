@@ -38,6 +38,7 @@ def parsing():
 def crea_grafi(path):
 
     global lista_grafi
+    g = Grafo()
     id2Node = {}
     lista_nodi = set()
     lista_archi = []
@@ -48,8 +49,8 @@ def crea_grafi(path):
 
     #creo il primo grafo di prova
     prima_riga = f.readline().split(" ")
-    n_nodi = int(prima_riga[0]) 
-    n_archi = int(prima_riga[1])
+    g.n_nodi = int(prima_riga[0]) 
+    g.n_archi = int(prima_riga[1])
     
     #creo lista di stringhe "nodo1, nodo2, peso"
     righe = f.read().splitlines()
@@ -95,9 +96,15 @@ def crea_grafi(path):
         lista_adiacenza_nodi[nodo_2].append(id2Node[nodo_1])
         lista_adiacenza[nodo_1].append(Arco(nodo_1, nodo_2, peso))      #arco(u,v)
         lista_adiacenza[nodo_2].append(Arco(nodo_2, nodo_1, peso))      #arco(v,u)
+    
+    g.id2Node = id2Node
+    g.lista_nodi = lista_nodi
+    g.lista_archi = lista_archi
+    g.lista_adiacenza = lista_adiacenza
+    g.lista_adiacenza_nodi = lista_adiacenza_nodi
 
     
-    lista_grafi.append(Grafo(n_nodi, n_archi, lista_nodi, lista_archi, id2Node, lista_adiacenza, lista_adiacenza_nodi))
+    lista_grafi.append(g)
 
 
 
@@ -240,29 +247,25 @@ def naiveKruskal(g):
 
 #non funziona 
 def kruskal(g):
-    grafo_mst = Grafo()
-    prova_mst = Grafo()
+    grafo = Grafo()
+    
     for v in g.getListaNodi():
         makeSet(v)
 
     mergeSort_weight(g.lista_archi, 0, len(g.lista_archi)-1)
     
-    inizializzaGrafo(prova_mst, g)
-    grafo_mst = copy.deepcopy(prova_mst)
+    inizializzaGrafo(grafo, g)
+
+    for key in grafo.lista_adiacenza_nodi.keys():
+        print("inizializzato " + key, [nodo.nodo for nodo in grafo.lista_adiacenza_nodi[key]])
 
     for arco in g.lista_archi:
-        prova_mst.lista_adiacenza_nodi[arco.nodo1].append(prova_mst.getNodo(arco.nodo2))
-        prova_mst.lista_adiacenza_nodi[arco.nodo2].append(prova_mst.getNodo(arco.nodo1))
-
         if findSet(g, g.getNodo(arco.nodo1)) != findSet(g, g.getNodo(arco.nodo2)):
-            grafo_mst.aggiungiArco(arco)
+            print(arco.getArco())
+            grafo.aggiungiArco(arco)
             union(g.getNodo(arco.nodo1), g.getNodo(arco.nodo2))
         
-        else:
-            prova_mst.lista_adiacenza_nodi[arco.nodo1].remove(prova_mst.getNodo(arco.nodo2))
-            prova_mst.lista_adiacenza_nodi[arco.nodo2].remove(prova_mst.getNodo(arco.nodo1))
-        
-    return grafo_mst
+    return grafo
 
 
 
@@ -305,7 +308,10 @@ print("KRUSKAL")
 print()
 g3 = kruskal(lista_grafi[0])
 g3.printAdj()
-
-print(checkMst(g3.lista_adiacenza_nodi, g1.lista_adiacenza_nodi))
-
 print("-"*30)
+
+#for key in g3.lista_adiacenza_nodi.keys():
+    #print(key, [nodo.nodo for nodo in g3.lista_adiacenza_nodi[key]])
+#print(checkMst(g3.lista_adiacenza_nodi, g1.lista_adiacenza_nodi))
+
+#print("-"*30)

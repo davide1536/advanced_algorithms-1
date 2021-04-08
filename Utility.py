@@ -3,6 +3,7 @@
 ################# non testato #################
 import copy
 from Nodo import Nodo
+from Grafo import Grafo
 
 
 ################# Merge + MergeSort #################

@@ -1,14 +1,14 @@
 from Arco import Arco
 from Nodo import Nodo
 class Grafo:
-    def __init__(self, n_nodi = 0, n_archi = 0, lista_nodi = set(), lista_archi = [], id2Node = {}, lista_adiacenza = {}, lista_adiacenza_nodi = {}):
-        self.n_nodi = n_nodi
-        self.n_archi = n_archi
-        self.lista_nodi = lista_nodi
-        self.lista_archi = lista_archi
-        self.id2Node = id2Node
-        self.lista_adiacenza = lista_adiacenza #dizionario key: nodo (str), value: lista archi del nodo (obj arco)
-        self.lista_adiacenza_nodi = lista_adiacenza_nodi #dizionario key: nodo (str), value: lista nodi adiacenti (obj nodo)
+    def __init__(self):
+        self.n_nodi = 0
+        self.n_archi = 0
+        self.lista_nodi = set()
+        self.lista_archi = []
+        self.id2Node = {}
+        self.lista_adiacenza = {} #dizionario key: nodo (str), value: lista archi del nodo (obj arco)
+        self.lista_adiacenza_nodi = {} #dizionario key: nodo (str), value: lista nodi adiacenti (obj nodo)
     
 
     def aggiungiNodo(self, nodo):
