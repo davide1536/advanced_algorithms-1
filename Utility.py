@@ -1,6 +1,7 @@
 #classe utile per la Union-Find e mergeSort
 #capitolo 21.3/4 del libro
 ################# non testato #################
+import copy
 from Nodo import Nodo
 
 
@@ -61,39 +62,29 @@ def mergeSort_weight(array, p, r):
 #
 # INPUT : grafo e nodo iniziale
 # OUTPUT : true, se c'è un ciclo, false altrimenti
-def dfs_ciclo(g, u):
-    u.vis = 1
+def dfs_ciclo(g, u, padri, visitati):
+    visitati[int(u.nodo)] = 1
     for v in g.lista_adiacenza_nodi[u.nodo]:
-        if v.nodo != u.padre:       # escludo il padre dalla lista degli adiacenti (sarà ovviamente già visitato)
-            if v.vis == 0:
-                v.padre = u.nodo
-                if dfs_ciclo(g, v):
-                    v.padre = None      #mentre risalgo resetto i paramentri per la prossima esecuzione
-                    u.vis = 0
+        if v.nodo != padri[int(u.nodo)]:       # escludo il padre dalla lista degli adiacenti (sarà ovviamente già visitato)
+            if visitati[int(v.nodo)] == 0:
+                padri[int(v.nodo)] = u.nodo
+                if dfs_ciclo(g, v, padri, visitati):
                     return True     # abbiamo incontrato un nodo già visitato e stiamo risalendo la ricorsione
             else:
-                v.padre = None      #mentre risalgo resetto i paramentri per la prossima esecuzione
-                u.vis = 0
                 return True         # caso in cui incontriamo un nodo già visitato
     return False
 
                 
+
 # funzione che dato in input il grafo g, inizializza il grafo n_g con gli stessi nodi
 def inizializzaGrafo(n_g, g):
         n_g.n_nodi = g.n_nodi
-        n_g.n_archi = g.n_archi
         n_g.lista_nodi = g.lista_nodi
-        n_g.lista_archi = g.lista_archi
         n_g.id2Node = g.id2Node
-        n_g.lista_adiacenza_nodi = g.lista_adiacenza_nodi
-        n_g.lista_adiacenza = g.lista_adiacenza
         
-        for i in n_g.lista_adiacenza_nodi.keys():
-            n_g.lista_adiacenza_nodi[i] = []
-        
-        for i in n_g.lista_adiacenza.keys():
-            n_g.lista_adiacenza[i] = []
-
+        for nodo in n_g.getListaNodi():
+            n_g.lista_adiacenza_nodi.setdefault(nodo.nodo, [])
+            n_g.lista_adiacenza.setdefault(nodo.nodo, [])
 
 
 

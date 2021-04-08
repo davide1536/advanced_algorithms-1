@@ -55,3 +55,9 @@ class Grafo:
         for nodo in self.id2Node.values():
             print(nodo.padre + " è padre di " + nodo.nodo)
     
+
+    def printAdj(self):
+        for i in self.lista_adiacenza_nodi.keys():
+            print(i, [ (arco.getArco()[1], arco.getArco()[2]) for arco in self.lista_adiacenza[i]])
+       
+    

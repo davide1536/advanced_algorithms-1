@@ -2,7 +2,7 @@ from Grafo import Grafo
 from Nodo import Nodo
 from Arco import Arco
 from heap import heap, HeapDecreaseKey, HeapExtractMin, HeapMinimum, BuildMinHeap, isIn
-from Utility import merge, mergeSort_weight, dfs_ciclo, inizializzaGrafo
+from Utility import *
 import random
 import os
 import math
@@ -13,6 +13,7 @@ from time import perf_counter_ns
 from collections import defaultdict
 import collections
 import matplotlib.pyplot as plt
+import copy
 
 
 #per_m = "algoritmi-avanzati-laboratorio/"
@@ -222,22 +223,50 @@ def naiveKruskal(g):
     mergeSort_weight(g.lista_archi, 0, len(g.lista_archi)-1)
     
     inizializzaGrafo(prova_mst, g)
-    inizializzaGrafo(grafo_mst, g)
-    
+    grafo_mst = copy.deepcopy(prova_mst)
+
     for arco in g.lista_archi:
         prova_mst.lista_adiacenza_nodi[arco.nodo1].append(prova_mst.getNodo(arco.nodo2))
         prova_mst.lista_adiacenza_nodi[arco.nodo2].append(prova_mst.getNodo(arco.nodo1))
-        
-    if not dfs_ciclo(prova_mst, g.getNodo(arco.nodo2)):
-            grafo_mst.aggiungiArco(arco)
+        padri = [0]*(g.n_nodi+1)
+        visitati = [0]*(g.n_nodi+1)
 
-    else:
-        prova_mst.lista_adiacenza_nodi[arco.nodo1].remove(prova_mst.getNodo(arco.nodo2))
-        prova_mst.lista_adiacenza_nodi[arco.nodo2].remove(prova_mst.getNodo(arco.nodo1))
-    
+        if not dfs_ciclo(prova_mst, g.getNodo(arco.nodo2), padri, visitati):
+                grafo_mst.aggiungiArco(arco)
+
+        else:
+            prova_mst.lista_adiacenza_nodi[arco.nodo1].remove(prova_mst.getNodo(arco.nodo2))
+            prova_mst.lista_adiacenza_nodi[arco.nodo2].remove(prova_mst.getNodo(arco.nodo1))
+        
     return grafo_mst
 
 
+
+def kruskal(g):
+    grafo_mst = Grafo()
+    prova_mst = Grafo()
+    for v in g.getListaNodi():
+        makeSet(v)
+
+    mergeSort_weight(g.lista_archi, 0, len(g.lista_archi)-1)
+    
+    inizializzaGrafo(prova_mst, g)
+    grafo_mst = copy.deepcopy(prova_mst)
+
+    for arco in g.lista_archi:
+        prova_mst.lista_adiacenza_nodi[arco.nodo1].append(prova_mst.getNodo(arco.nodo2))
+        prova_mst.lista_adiacenza_nodi[arco.nodo2].append(prova_mst.getNodo(arco.nodo1))
+        padri = [0]*(g.n_nodi+1)
+        visitati = [0]*(g.n_nodi+1)
+
+        if not dfs_ciclo(prova_mst, g.getNodo(arco.nodo2), padri, visitati):
+                grafo_mst.aggiungiArco(arco)
+
+        else:
+            prova_mst.lista_adiacenza_nodi[arco.nodo1].remove(prova_mst.getNodo(arco.nodo2))
+            prova_mst.lista_adiacenza_nodi[arco.nodo2].remove(prova_mst.getNodo(arco.nodo1))
+        
+    return grafo_mst
 
 
 
@@ -245,40 +274,13 @@ def naiveKruskal(g):
 
 parsing()
 #print("FINE PARSING")
-plot_graph()
-print("fine esecuzione")
+#plot_graph()
+#print("fine esecuzione")
 
 g1 = naiveKruskal(lista_grafi[0])
-for i in g1.lista_adiacenza_nodi.keys():
-    print(i, [nodo.nodo for nodo in g1.lista_adiacenza_nodi[i]])
-
+g1.printAdj()
+#print(g1.lista_adiacenza)
 print("-"*30)
 
-""" g2 = prim(lista_grafi[0], lista_grafi[0].getNodo("6"))
-#print(g2.getPadreFiglio())
-
-for i in g1.lista_adiacenza_nodi.keys():
-    print(i, [nodo.nodo for nodo in g2.lista_adiacenza_nodi[i]])
-
-#print(lista_grafi[0].lista_adiacenza_nodi['3']) """
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+g2 = prim(lista_grafi[0], lista_grafi[0].getNodo("6"))
+print(g2.getPadreFiglio())
