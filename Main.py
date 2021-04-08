@@ -28,7 +28,7 @@ def parsing():
     global directory
     for file in os.listdir(directory):
         #if not (file.endswith("100000.txt") or file.endswith("80000.txt") or file.endswith("40000.txt") or file.endswith("20000.txt")):
-        #if file.endswith("03_10.txt"):
+        if file.endswith("03_10.txt"):
             crea_grafi(file)
 
 
@@ -140,13 +140,11 @@ def plot_graph():
     #grandezza gruppi
     #per calcolare la costante considero ElgV quindi per ogni dimensione di grafo prendo il numero di nodi e la media del numero degli archi
     sizes = []
-    i = 0
-    j = 0
     arches = 0
     for key in graphs_groupped.keys():
         for g in graphs_groupped[key]:
-            arches += int(g.n_archi)
-            nodes = int(g.n_nodi)
+            arches += g.n_archi
+            nodes = g.n_nodi
         avg_arches = arches / len(graphs_groupped[key])
         sizes.append([nodes, avg_arches])
         arches = 0
@@ -206,7 +204,6 @@ def prim(g, radice):
                 #nodo_adj.key = arco.peso
                 #HeapDecreaseKey(q, q.vector.index(nodo_adj), nodo_adj.key)
                 HeapDecreaseKey(q, q.vector.index(nodo_adj), arco.peso)
-    return g
 
 
 
@@ -241,7 +238,7 @@ def naiveKruskal(g):
     return grafo_mst
 
 
-
+# Tutti gli input della union DEVONO essere nodi (non object) interi
 def kruskal(g):
     grafo_mst = Grafo()
     prova_mst = Grafo()
@@ -257,10 +254,11 @@ def kruskal(g):
         prova_mst.lista_adiacenza_nodi[arco.nodo1].append(prova_mst.getNodo(arco.nodo2))
         prova_mst.lista_adiacenza_nodi[arco.nodo2].append(prova_mst.getNodo(arco.nodo1))
         padri = [0]*(g.n_nodi+1)
-        visitati = [0]*(g.n_nodi+1)
+        rank = [0]*(g.n_nodi+1)
 
-        if not dfs_ciclo(prova_mst, g.getNodo(arco.nodo2), padri, visitati):
-                grafo_mst.aggiungiArco(arco)
+        if findSet(int(arco.nodo1)) != findSet(int(arco.nodo2)):
+            grafo_mst.aggiungiArco(arco)
+            union(int(arco.nodo1), int(arco.nodo2))
 
         else:
             prova_mst.lista_adiacenza_nodi[arco.nodo1].remove(prova_mst.getNodo(arco.nodo2))
@@ -282,5 +280,8 @@ g1.printAdj()
 #print(g1.lista_adiacenza)
 print("-"*30)
 
-g2 = prim(lista_grafi[0], lista_grafi[0].getNodo("6"))
-print(g2.getPadreFiglio())
+prim(lista_grafi[0], lista_grafi[0].getNodo("6"))
+lista_adiacenza = lista_grafi[0].getPadreFiglio()
+for nodo in lista_adiacenza:
+    print("i nodi adiacenti di",nodo, "sono", [nodo.nodo for nodo in lista_adiacenza[nodo]] )
+print(checkMst(lista_adiacenza, g1.lista_adiacenza_nodi))

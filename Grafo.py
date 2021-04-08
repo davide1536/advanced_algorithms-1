@@ -52,12 +52,20 @@ class Grafo:
 
     #mostra vettore dei padri
     def getPadreFiglio(self):
+        lista_adiacenza_nodi_padri = {}
+        for nodo in self.getListaNodi():
+            lista_adiacenza_nodi_padri.setdefault(nodo.nodo, [])
         for nodo in self.id2Node.values():
-            print(nodo.padre + " è padre di " + nodo.nodo)
+            #print(nodo.padre + " è padre di " + nodo.nodo)
+            if nodo.nodo != nodo.padre:
+                lista_adiacenza_nodi_padri[nodo.nodo].append(self.getNodo(nodo.padre))
+                lista_adiacenza_nodi_padri[nodo.padre].append(self.getNodo(nodo.nodo))
+        return lista_adiacenza_nodi_padri
+
     
 
     def printAdj(self):
         for i in self.lista_adiacenza_nodi.keys():
-            print(i, [ (arco.getArco()[1], arco.getArco()[2]) for arco in self.lista_adiacenza[i]])
+            print(i, [arco.getArco()[1] for arco in self.lista_adiacenza[i]])
        
     

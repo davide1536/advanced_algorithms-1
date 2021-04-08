@@ -87,6 +87,12 @@ def inizializzaGrafo(n_g, g):
             n_g.lista_adiacenza.setdefault(nodo.nodo, [])
 
 
+def checkMst(adj_list1, adj_list2):
+    for key in adj_list1.keys():
+        if adj_list1[key] != adj_list2[key]:
+            print([nodo.nodo for nodo in adj_list1[key]], [nodo.nodo for nodo in adj_list2[key]])
+            return False
+
 
 
 ################# Union-Find #################
@@ -110,5 +116,4 @@ def findSet(nodo1):
     if nodo1 != nodo1.padre:
         nodo1.padre = findSet(nodo1.padre)
     return nodo1.padre
-
     
