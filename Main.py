@@ -15,8 +15,8 @@ import collections
 import matplotlib.pyplot as plt
 
 
-per_m = "algoritmi-avanzati-laboratorio/"
-#per_m = ""
+#per_m = "algoritmi-avanzati-laboratorio/"
+per_m = ""
 #togliere per_m
 directory = per_m+"mst_dataset/"
 lista_grafi = []
@@ -27,7 +27,7 @@ def parsing():
     global directory
     for file in os.listdir(directory):
         #if not (file.endswith("100000.txt") or file.endswith("80000.txt") or file.endswith("40000.txt") or file.endswith("20000.txt")):
-        if file.endswith("03_10.txt"):
+        #if file.endswith("03_10.txt"):
             crea_grafi(file)
 
 
@@ -47,8 +47,8 @@ def crea_grafi(path):
 
     #creo il primo grafo di prova
     prima_riga = f.readline().split(" ")
-    n_nodi = prima_riga[0] 
-    n_archi = prima_riga[1]
+    n_nodi = int(prima_riga[0]) 
+    n_archi = int(prima_riga[1])
     
     #creo lista di stringhe "nodo1, nodo2, peso"
     righe = f.read().splitlines()
@@ -132,24 +132,40 @@ def plot_graph():
 
     #ordino il dizionario in base alla key (numero di nodi)
     graphs_groupped = collections.OrderedDict(sorted(graphs_groupped.items()))
+    
 
     #prendo i tempi
     times = [measure_run_time(len(graphs_groupped[key]), graphs_groupped[key], "prim") for key in graphs_groupped]
-
     #grandezza gruppi
-    sizes = [key for key in graphs_groupped]
+    #per calcolare la costante considero ElgV quindi per ogni dimensione di grafo prendo il numero di nodi e la media del numero degli archi
+    sizes = []
+    i = 0
+    j = 0
+    arches = 0
+    for key in graphs_groupped.keys():
+        for g in graphs_groupped[key]:
+            arches += int(g.n_archi)
+            nodes = int(g.n_nodi)
+        avg_arches = arches / len(graphs_groupped[key])
+        sizes.append([nodes, avg_arches])
+        arches = 0
+        nodes = 0
 
+    #sizes = [key for key in graphs_groupped]
+    for i in range(len(sizes)):
+        print("n nodi ",sizes[i][0],"n archi ", sizes[i][1])
     #calcolo ratios e costant
     ratios = [None] + [round(times[i+1]/times[i],3) for i in range(len(sizes)-1)]
-    c_estimates = [round(times[i]/sizes[i],3) for i in range(len(sizes))]
+    #c_estimates = [round(times[i]/sizes[i],3) for i in range(len(sizes))]
+    c_estimates = [round(times[i]/(sizes[i][1] * math.log(sizes[i][0])),3) for i in range(len(sizes))]
 
     print("Size\t\ttTime(ms)\t\tCostant\t\tRatio")
     print(65*"-")
     for i in range(len(sizes)):
         if i < 10:
-            print(sizes[i], '' , times[i], '', '', c_estimates[i], '', ratios[i], sep="\t")
+            print(sizes[i][0], '' , times[i], '', '', c_estimates[i], '', ratios[i], sep="\t")
         else:
-            print(sizes[i], '', times[i], '', c_estimates[i], '', ratios[i], sep="\t")
+            print(sizes[i][0], '', times[i], '', c_estimates[i], '', ratios[i], sep="\t")
     print(65*"-")
 
 
@@ -160,7 +176,11 @@ def plot_graph():
         #times.append(time)
 
     #grafico dei tempi
-    plt.plot(graphs_groupped.keys(), times)
+    reference = []
+    for i in range (len(sizes)):
+        reference.append (c_estimates[len(c_estimates)-1] * sizes[i][1] * math.log(sizes[i][0]))
+
+    plt.plot(graphs_groupped.keys(), times, graphs_groupped.keys(), reference)
     plt.ylabel('run time(ns)')
     plt.xlabel('size')
     plt.show()
@@ -182,8 +202,9 @@ def prim(g, radice):
             nodo_adj = g.getNodo(arco.nodo2)        #g.getNodo(arco.nodo2) = (oggetto) nodo adiacente a u
             if isIn(q,nodo_adj) == 1 and arco.peso < nodo_adj.key:
                 nodo_adj.padre = u.nodo
-                nodo_adj.key = arco.peso
-                HeapDecreaseKey(q, q.vector.index(nodo_adj), nodo_adj.key)
+                #nodo_adj.key = arco.peso
+                #HeapDecreaseKey(q, q.vector.index(nodo_adj), nodo_adj.key)
+                HeapDecreaseKey(q, q.vector.index(nodo_adj), arco.peso)
     return g
 
 
@@ -224,8 +245,8 @@ def naiveKruskal(g):
 
 parsing()
 #print("FINE PARSING")
-#plot_graph()
-#print("fine esecuzione")
+plot_graph()
+print("fine esecuzione")
 
 g1 = naiveKruskal(lista_grafi[0])
 for i in g1.lista_adiacenza_nodi.keys():
