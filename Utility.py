@@ -89,31 +89,37 @@ def inizializzaGrafo(n_g, g):
 
 def checkMst(adj_list1, adj_list2):
     for key in adj_list1.keys():
-        if adj_list1[key] != adj_list2[key]:
-            print([nodo.nodo for nodo in adj_list1[key]], [nodo.nodo for nodo in adj_list2[key]])
+        if not equals(adj_list1[key],adj_list2[key]):
             return False
+    return True
 
+def equals(l1, l2):
+    l1 = [nodo.nodo for nodo in l1]
+    l2 = [nodo.nodo for nodo in l2]
+    l1.sort()
+    l2.sort()
+    return l1 == l2
 
 
 ################# Union-Find #################
 
 def makeSet(nodo):
-    nodo.padre = nodo
+    nodo.padre = nodo.nodo
     nodo.rank = 0
 
 def link(nodo1, nodo2):
     if nodo1.rank > nodo2.rank:
-        nodo2.padre = nodo1
+        nodo2.padre = nodo1.nodo
     else:
-        nodo1.padre = nodo2
+        nodo1.padre = nodo2.nodo
         if nodo1.rank == nodo2.rank:
             nodo2.rank += 1
 
 def union(nodo1, nodo2):
     link(nodo1, nodo2)
 
-def findSet(nodo1):
-    if nodo1 != nodo1.padre:
-        nodo1.padre = findSet(nodo1.padre)
+def findSet(g, nodo1):
+    if nodo1.nodo != nodo1.padre:
+        nodo1.padre = findSet(g, g.getNodo(nodo1.padre))
     return nodo1.padre
     
