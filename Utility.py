@@ -108,18 +108,38 @@ def equals(l1, l2):
 
 def makeSet(nodo):
     nodo.padre = nodo.nodo
-    nodo.rank = 0
+    nodo.size = 0
 
+#union-by-rank
 def link(nodo1, nodo2):
-    if nodo1.rank > nodo2.rank:
+    if nodo1.size > nodo2.size:
         nodo2.padre = nodo1.nodo
     else:
         nodo1.padre = nodo2.nodo
-        if nodo1.rank == nodo2.rank:
-            nodo2.rank += 1
+        if nodo1.size == nodo2.size:
+            nodo2.size += 1
 
-def union(nodo1, nodo2):
+#union-by-rank
+def union2(nodo1, nodo2):
     link(nodo1, nodo2)
+
+#union-by-size
+def union(nodo1, nodo2, g):
+    radice_nodo1 = findSet(g, nodo1) 
+    radice_nodo2 = findSet(g, nodo2)
+    r1 = g.getNodo(radice_nodo1)   #ottengo gli oggetti
+    r2 = g.getNodo(radice_nodo2)  
+    if radice_nodo1 == radice_nodo2:      #se hanno stessa radice, sono già nello stesso insieme
+        return
+    if r1.size >= r2.size:
+        r2.padre = r1.nodo
+        r1.size += r2.size
+    else:
+        r1.padre = r2.nodo
+        r2.size += r2.size
+
+
+
 
 def findSet(g, nodo1):
     if nodo1.nodo != nodo1.padre:

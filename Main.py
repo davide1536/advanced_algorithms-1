@@ -279,27 +279,22 @@ def naiveKruskal(g):
         
     return grafo_mst
 
-
-#non funziona 
 def kruskal(g):
     grafo = Grafo()
+
+    inizializzaGrafo(grafo, g)
     
-    for v in g.getListaNodi():
+    for v in grafo.getListaNodi():
         makeSet(v)
 
     mergeSort_weight(g.lista_archi, 0, len(g.lista_archi)-1)
     
-    inizializzaGrafo(grafo, g)
-
-    for key in grafo.lista_adiacenza_nodi.keys():
-        print("inizializzato " + key, [nodo.nodo for nodo in grafo.lista_adiacenza_nodi[key]])
-
     for arco in g.lista_archi:
-        if findSet(g, g.getNodo(arco.nodo1)) != findSet(g, g.getNodo(arco.nodo2)):
-            print(arco.getArco())
-            grafo.aggiungiArco(arco)
-            union(g.getNodo(arco.nodo1), g.getNodo(arco.nodo2))
         
+        if findSet(grafo, grafo.getNodo(arco.nodo1)) != findSet(grafo, grafo.getNodo(arco.nodo2)):
+            grafo.aggiungiArco(arco)
+            union(grafo.getNodo(arco.nodo1), grafo.getNodo(arco.nodo2), grafo)
+    
     return grafo
 
 
@@ -330,8 +325,10 @@ prim(lista_grafi[0], lista_grafi[0].getNodo("6"))
 lista_adiacenza = lista_grafi[0].getPadreFiglio()
 
 for nodo in lista_adiacenza:
-    print("i nodi adiacenti di",nodo, "sono", [nodo.nodo for nodo in lista_adiacenza[nodo]] )
+    print(nodo, [nodo.nodo for nodo in lista_adiacenza[nodo]] )
 
+print("-"*30)
+print("PRIM == KRUSKAL NAIVE?")
 print(checkMst(lista_adiacenza, g1.lista_adiacenza_nodi))
 
 
@@ -345,10 +342,7 @@ g3 = kruskal(lista_grafi[0])
 g3.printAdj()
 print("-"*30)
 
-measurePerformance()
+print("KRUSKAL == KRUSKAL NAIVE?")
+print(checkMst(g3.lista_adiacenza_nodi, g1.lista_adiacenza_nodi))
 
-#for key in g3.lista_adiacenza_nodi.keys():
-    #print(key, [nodo.nodo for nodo in g3.lista_adiacenza_nodi[key]])
-#print(checkMst(g3.lista_adiacenza_nodi, g1.lista_adiacenza_nodi))
-
-#print("-"*30)
+print("-"*30)
