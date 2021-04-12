@@ -87,7 +87,7 @@ def inizializzaGrafo(n_g, g):
             n_g.lista_adiacenza_nodi.setdefault(nodo.nodo, [])
             n_g.lista_adiacenza.setdefault(nodo.nodo, [])
 
-
+# funzione che controlla se 2 liste di adiacenza sono uguali
 def checkMst(adj_list1, adj_list2):
     for key in adj_list1.keys():
         if not equals(adj_list1[key],adj_list2[key]):
@@ -102,6 +102,18 @@ def equals(l1, l2):
     if l1 != l2:
         print(l1,l2)
     return l1 == l2
+
+# funzione che controlla se tutti i grafi di una lista sono uguali
+# prima lista prim
+# seconda lista kruskal
+def confrontaGrafi(l_grafi1, l_grafi2):
+    for i in range(0, len(l_grafi1)-1):
+        
+        lista_adj_1 = l_grafi1[i].getPadreFiglio()
+        lista_adj_2 = l_grafi2[i].lista_adiacenza_nodi
+        
+        print(checkMst(lista_adj_1, lista_adj_2))
+
 
 
 ################# Union-Find #################
@@ -136,8 +148,7 @@ def union(nodo1, nodo2, g):
         r1.size += r2.size
     else:
         r1.padre = r2.nodo
-        r2.size += r2.size
-
+        r2.size += r1.size
 
 
 

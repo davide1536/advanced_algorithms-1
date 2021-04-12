@@ -15,7 +15,8 @@ import collections
 import matplotlib.pyplot as plt
 import copy
 
-
+p_g = []
+k_g = []
 #per_m = "algoritmi-avanzati-laboratorio/"
 per_m = ""
 #togliere per_m
@@ -27,7 +28,7 @@ lista_grafi = []
 def parsing():
     global directory
     for file in os.listdir(directory):
-        #if not (file.endswith("100000.txt") or file.endswith("80000.txt") or file.endswith("40000.txt") or file.endswith("20000.txt")):
+        if not (file.endswith("100000.txt") or file.endswith("80000.txt") or file.endswith("40000.txt") or file.endswith("20000.txt")):
         #if file.endswith("03_10.txt"):
             crea_grafi(file)
 
@@ -111,13 +112,16 @@ def crea_grafi(path):
 
 def measure_run_time(n_instances, graphs, algorithm):
     sum_times = 0
+    #liste per confrontare gli algoritmi
+    global p_g
+    global k_g
     for i in range(n_instances):
         print ("testo la ", i, "instanza")
         if algorithm == "prim":
             gc.disable()
             nodo_casuale = next(iter(graphs[i].lista_nodi))    #casuale perchè il set lista_nodi cambia ordine ad ogni parsing
             start_time = perf_counter_ns()
-            prim(graphs[i],graphs[i].getNodo(nodo_casuale))
+            p_g.append(prim(graphs[i],graphs[i].getNodo(nodo_casuale)))
             end_time = perf_counter_ns()
             gc.enable()
             sum_times += end_time - start_time
@@ -131,7 +135,13 @@ def measure_run_time(n_instances, graphs, algorithm):
             sum_times += end_time - start_time
 
         if algorithm == "Kruskal":
-            pass
+            gc.disable()
+            start_time = perf_counter_ns()
+            k_g.append(kruskal(graphs[i]))
+            end_time = perf_counter_ns()
+            gc.enable()
+            sum_times += end_time - start_time
+
     avg_time = round((sum_times / n_instances)//1000, 3) #millisecondi
     return avg_time
 
@@ -159,15 +169,16 @@ def measurePerformance():
         arches = 0
         nodes = 0
 
-    algorithmsToTest = ["prim", "NaiveKruskal"]
-    totTimes = [[]]
-    totRatios = [[]]
-    totConstant = [[]]
+    algorithmsToTest = ["prim", "Kruskal"]
+    totTimes = []
+    totRatios = []
+    totConstant = []
     for algorithm in algorithmsToTest:
-        print ("sto misurando le performance di ", algorithm)
         times = [measure_run_time(len(graphs_groupped[key]), graphs_groupped[key], algorithm) for key in graphs_groupped]
         totTimes.append(times)
-        totRatios.append([None] + [round(times[i+1]/times[i],3) for i in range(len(sizes)-1)])
+        ratios = [None] + [round(times[i+1]/times[i],3) for i in range(len(sizes)-1)]
+        totRatios.append(ratios)
+
         if algorithm == "NaiveKruskal":
             totConstant.append([round(times[i]/(sizes[i][1] *sizes[i][0]),3) for i in range(len(sizes))])
         else:
@@ -190,7 +201,7 @@ def plot_graph():
     #ratios = [None] + [round(times[i+1]/times[i],3) for i in range(len(sizes)-1)]
     #c_estimates = [round(times[i]/sizes[i],3) for i in range(len(sizes))]
     #c_estimates = [round(times[i]/(sizes[i][1] * math.log(sizes[i][0])),3) for i in range(len(sizes))]
-    algorithmsToTest = ["prim", "NaiveKruskal"]
+    algorithmsToTest = ["prim","Kruskal"]
 
     for i in range(len(algorithmsToTest)):
         print ("Algoritmo:", algorithmsToTest[i])
@@ -199,9 +210,9 @@ def plot_graph():
         print(65*"-")
         for j in range(len(sizes)):
             if j < 10:
-                print(sizes[i][0], '' , times[i][j], '', '', constant[i][j], '', ratios[i][j], sep="\t")
+                print(sizes[j][0], '' , times[i][j], '', '', constant[i][j], '', ratios[i][j] ,sep="\t")
             else:
-                print(sizes[i][0], '', times[i][j], '', constant[i][j], '', ratios[i][j], sep="\t")
+                print(sizes[j][0], '', times[i][j], '', constant[i][j], '', ratios[i][j], sep="\t")
         print(65*"-")
 
 
@@ -221,7 +232,7 @@ def plot_graph():
                 reference.append (constant[i][len(constant)-1] * sizes[j][1] * math.log(sizes[j][0]))
 
         plt.plot(graphs_groupped.keys(), times[i], graphs_groupped.keys(), reference)
-        plt.title("performance", algorithmsToTest[i])
+        plt.title("performance " + algorithmsToTest[i])
         plt.ylabel('run time(ns)')
         plt.xlabel('size')
         plt.show()
@@ -246,7 +257,7 @@ def prim(g, radice):
                 #nodo_adj.key = arco.peso
                 #HeapDecreaseKey(q, q.vector.index(nodo_adj), nodo_adj.key)
                 HeapDecreaseKey(q, q.vector.index(nodo_adj), arco.peso)
-
+    return g
 
 
 # NOTA IMPORTANTE
@@ -279,6 +290,8 @@ def naiveKruskal(g):
         
     return grafo_mst
 
+
+
 def kruskal(g):
     grafo = Grafo()
 
@@ -302,47 +315,50 @@ def kruskal(g):
 ######################## MAIN ########################
 
 parsing()
+#plot_graph()
+confrontaGrafi(p_g, k_g)
 #print("FINE PARSING")
 #plot_graph()
 #print("fine esecuzione")
 
 
 ########### NAIVE-KRUSKAL ###########
-print("-"*30)
+""" print("-"*30)
 print()
 print("NAIVE-KRUSKAL")
 print()
 g1 = naiveKruskal(lista_grafi[0])
-g1.printAdj()
+g1.printAdj() """
 
 
 ############### PRIM ################
-print("-"*30)
-print()
-print("PRIM")
-print()
-prim(lista_grafi[0], lista_grafi[0].getNodo("6"))
-lista_adiacenza = lista_grafi[0].getPadreFiglio()
+#print("-"*30)
+#print()
+#print("PRIM")
+#print()
+for i in range(0, len(lista_grafi)-1):
+    # prim(lista_grafi[i], lista_grafi[i].getNodo("6"))
+    lista_adiacenza = lista_grafi[i].getPadreFiglio()
+    g2 = kruskal(lista_grafi[i])
 
-for nodo in lista_adiacenza:
-    print(nodo, [nodo.nodo for nodo in lista_adiacenza[nodo]] )
+#for nodo in lista_adiacenza:
+    #print(nodo, [nodo.nodo for nodo in lista_adiacenza[nodo]] )
 
-print("-"*30)
-print("PRIM == KRUSKAL NAIVE?")
-print(checkMst(lista_adiacenza, g1.lista_adiacenza_nodi))
+#print("-"*30)
+#print("PRIM == KRUSKAL NAIVE?")
+#print(checkMst(lista_adiacenza, g1.lista_adiacenza_nodi))
 
 
 ############### KRUSKAL #############
-#non funziona
-print("-"*30)
-print()
-print("KRUSKAL")
-print()
-g3 = kruskal(lista_grafi[0])
-g3.printAdj()
-print("-"*30)
+#print("-"*30)
+#print()
+#print("KRUSKAL")
+#print()
+    g3 = naiveKruskal(lista_grafi[i])
+#g3.printAdj()
+#print("-"*30)
 
-print("KRUSKAL == KRUSKAL NAIVE?")
-print(checkMst(g3.lista_adiacenza_nodi, g1.lista_adiacenza_nodi))
+#print("KRUSKAL == KRUSKAL NAIVE?")
+    print(checkMst(g3.lista_adiacenza_nodi, g2.lista_adiacenza_nodi))
 
-print("-"*30)
+#print("-"*30)
