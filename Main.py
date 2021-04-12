@@ -16,8 +16,8 @@ import matplotlib.pyplot as plt
 import copy
 
 
-per_m = "algoritmi-avanzati-laboratorio/"
-#per_m = ""
+#per_m = "algoritmi-avanzati-laboratorio/"
+per_m = ""
 #togliere per_m
 directory = per_m+"mst_dataset/"
 lista_grafi = []
@@ -28,7 +28,7 @@ def parsing():
     global directory
     for file in os.listdir(directory):
         #if not (file.endswith("100000.txt") or file.endswith("80000.txt") or file.endswith("40000.txt") or file.endswith("20000.txt")):
-        if file.endswith("03_10.txt"):
+        #if file.endswith("03_10.txt"):
             crea_grafi(file)
 
 
@@ -112,6 +112,7 @@ def crea_grafi(path):
 def measure_run_time(n_instances, graphs, algorithm):
     sum_times = 0
     for i in range(n_instances):
+        print ("testo la ", i, "instanza")
         if algorithm == "prim":
             gc.disable()
             nodo_casuale = next(iter(graphs[i].lista_nodi))    #casuale perchè il set lista_nodi cambia ordine ad ogni parsing
@@ -122,16 +123,20 @@ def measure_run_time(n_instances, graphs, algorithm):
             sum_times += end_time - start_time
 
         if algorithm == "NaiveKruskal":
-            pass
+            gc.disable()
+            start_time = perf_counter_ns()
+            naiveKruskal(graphs[i])
+            end_time = perf_counter_ns()
+            gc.enable()
+            sum_times += end_time - start_time
+
         if algorithm == "Kruskal":
             pass
     avg_time = round((sum_times / n_instances)//1000, 3) #millisecondi
     return avg_time
 
 
-
-
-def plot_graph():
+def measurePerformance():
     graphs_groupped = defaultdict(list)
     
     #raggruppo i grafi in base alla dimensione dei loro nodi con un dizionario key:n_nodi, value: grafi con quel numero di nodi        
@@ -142,9 +147,6 @@ def plot_graph():
     graphs_groupped = collections.OrderedDict(sorted(graphs_groupped.items()))
     
 
-    #prendo i tempi
-    times = [measure_run_time(len(graphs_groupped[key]), graphs_groupped[key], "prim") for key in graphs_groupped]
-    #grandezza gruppi
     #per calcolare la costante considero ElgV quindi per ogni dimensione di grafo prendo il numero di nodi e la media del numero degli archi
     sizes = []
     arches = 0
@@ -157,22 +159,50 @@ def plot_graph():
         arches = 0
         nodes = 0
 
-    #sizes = [key for key in graphs_groupped]
-    for i in range(len(sizes)):
-        print("n nodi ",sizes[i][0],"n archi ", sizes[i][1])
-    #calcolo ratios e costant
-    ratios = [None] + [round(times[i+1]/times[i],3) for i in range(len(sizes)-1)]
-    #c_estimates = [round(times[i]/sizes[i],3) for i in range(len(sizes))]
-    c_estimates = [round(times[i]/(sizes[i][1] * math.log(sizes[i][0])),3) for i in range(len(sizes))]
-
-    print("Size\t\ttTime(ms)\t\tCostant\t\tRatio")
-    print(65*"-")
-    for i in range(len(sizes)):
-        if i < 10:
-            print(sizes[i][0], '' , times[i], '', '', c_estimates[i], '', ratios[i], sep="\t")
+    algorithmsToTest = ["prim", "NaiveKruskal"]
+    totTimes = [[]]
+    totRatios = [[]]
+    totConstant = [[]]
+    for algorithm in algorithmsToTest:
+        print ("sto misurando le performance di ", algorithm)
+        times = [measure_run_time(len(graphs_groupped[key]), graphs_groupped[key], algorithm) for key in graphs_groupped]
+        totTimes.append(times)
+        totRatios.append([None] + [round(times[i+1]/times[i],3) for i in range(len(sizes)-1)])
+        if algorithm == "NaiveKruskal":
+            totConstant.append([round(times[i]/(sizes[i][1] *sizes[i][0]),3) for i in range(len(sizes))])
         else:
-            print(sizes[i][0], '', times[i], '', c_estimates[i], '', ratios[i], sep="\t")
-    print(65*"-")
+            totConstant.append([round(times[i]/(sizes[i][1] * math.log(sizes[i][0])),3) for i in range(len(sizes))])
+
+    return [totTimes, totRatios, totConstant, sizes, graphs_groupped]
+    
+
+
+def plot_graph():
+    
+
+    #misuro le performance per ogni algoritmo, i valori times, ratios, constant sono matrici di dimensione 4*n n sono il numero di dimensioni dei grafi
+    times, ratios, constant, sizes, graphs_groupped = measurePerformance(graphs_groupped, algorithm, sizes)
+    #times = [measure_run_time(len(graphs_groupped[key]), graphs_groupped[key], "prim") for key in graphs_groupped]
+    #grandezza gruppi
+
+    #sizes = [key for key in graphs_groupped]
+    #calcolo ratios e costant
+    #ratios = [None] + [round(times[i+1]/times[i],3) for i in range(len(sizes)-1)]
+    #c_estimates = [round(times[i]/sizes[i],3) for i in range(len(sizes))]
+    #c_estimates = [round(times[i]/(sizes[i][1] * math.log(sizes[i][0])),3) for i in range(len(sizes))]
+    algorithmsToTest = ["prim", "NaiveKruskal"]
+
+    for i in range(len(algorithmsToTest)):
+        print ("Algoritmo:", algorithmsToTest[i])
+        print("Size\t\ttTime(ms)\t\tCostant\t\tRatio")
+
+        print(65*"-")
+        for j in range(len(sizes)):
+            if j < 10:
+                print(sizes[i][0], '' , times[i][j], '', '', c_estimates[i][j], '', ratios[i][j], sep="\t")
+            else:
+                print(sizes[i][0], '', times[i][j], '', c_estimates[i][j], '', ratios[i][j], sep="\t")
+        print(65*"-")
 
 
     #for key in graphs_groupped:
@@ -182,17 +212,22 @@ def plot_graph():
         #times.append(time)
 
     #grafico dei tempi
-    reference = []
-    for i in range (len(sizes)):
-        reference.append (c_estimates[len(c_estimates)-1] * sizes[i][1] * math.log(sizes[i][0]))
+        reference = []
+        if algorithmsToTest[i] == "NaiveKruskal":
+            for j in range (len(sizes)):
+                reference.append (c_estimates[i][len(c_estimates)-1] * sizes[j][1] * sizes[j][0])
+        else:
+            for j in range (len(sizes)):
+                reference.append (c_estimates[i][len(c_estimates)-1] * sizes[j][1] * math.log(sizes[j][0]))
 
-    plt.plot(graphs_groupped.keys(), times, graphs_groupped.keys(), reference)
-    plt.ylabel('run time(ns)')
-    plt.xlabel('size')
-    plt.show()
+        plt.plot(graphs_groupped.keys(), times[i], graphs_groupped.keys(), reference)
+        plt.title("performance", algorithmsToTest[i])
+        plt.ylabel('run time(ns)')
+        plt.xlabel('size')
+        plt.show()
 
 
-
+ 
 
 def prim(g, radice):
     radice.padre = radice.nodo
@@ -309,6 +344,8 @@ print()
 g3 = kruskal(lista_grafi[0])
 g3.printAdj()
 print("-"*30)
+
+measurePerformance()
 
 #for key in g3.lista_adiacenza_nodi.keys():
     #print(key, [nodo.nodo for nodo in g3.lista_adiacenza_nodi[key]])
