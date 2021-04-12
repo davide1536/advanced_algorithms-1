@@ -181,7 +181,7 @@ def plot_graph():
     
 
     #misuro le performance per ogni algoritmo, i valori times, ratios, constant sono matrici di dimensione 4*n n sono il numero di dimensioni dei grafi
-    times, ratios, constant, sizes, graphs_groupped = measurePerformance(graphs_groupped, algorithm, sizes)
+    times, ratios, constant, sizes, graphs_groupped = measurePerformance()
     #times = [measure_run_time(len(graphs_groupped[key]), graphs_groupped[key], "prim") for key in graphs_groupped]
     #grandezza gruppi
 
@@ -199,9 +199,9 @@ def plot_graph():
         print(65*"-")
         for j in range(len(sizes)):
             if j < 10:
-                print(sizes[i][0], '' , times[i][j], '', '', c_estimates[i][j], '', ratios[i][j], sep="\t")
+                print(sizes[i][0], '' , times[i][j], '', '', constant[i][j], '', ratios[i][j], sep="\t")
             else:
-                print(sizes[i][0], '', times[i][j], '', c_estimates[i][j], '', ratios[i][j], sep="\t")
+                print(sizes[i][0], '', times[i][j], '', constant[i][j], '', ratios[i][j], sep="\t")
         print(65*"-")
 
 
@@ -215,10 +215,10 @@ def plot_graph():
         reference = []
         if algorithmsToTest[i] == "NaiveKruskal":
             for j in range (len(sizes)):
-                reference.append (c_estimates[i][len(c_estimates)-1] * sizes[j][1] * sizes[j][0])
+                reference.append (constant[i][len(constant)-1] * sizes[j][1] * sizes[j][0])
         else:
             for j in range (len(sizes)):
-                reference.append (c_estimates[i][len(c_estimates)-1] * sizes[j][1] * math.log(sizes[j][0]))
+                reference.append (constant[i][len(constant)-1] * sizes[j][1] * math.log(sizes[j][0]))
 
         plt.plot(graphs_groupped.keys(), times[i], graphs_groupped.keys(), reference)
         plt.title("performance", algorithmsToTest[i])
