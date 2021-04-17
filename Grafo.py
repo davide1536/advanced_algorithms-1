@@ -1,5 +1,6 @@
 from Arco import Arco
 from Nodo import Nodo
+import copy
 class Grafo:
     def __init__(self):
         self.n_nodi = 0
@@ -9,6 +10,7 @@ class Grafo:
         self.id2Node = {}
         self.lista_adiacenza = {} #dizionario key: nodo (str), value: lista archi del nodo (obj arco)
         self.lista_adiacenza_nodi = {} #dizionario key: nodo (str), value: lista nodi adiacenti (obj nodo)
+        self.totPeso = 0
     
 
     def aggiungiNodo(self, nodo):
@@ -50,17 +52,27 @@ class Grafo:
     def getListaNodi(self):
         return list(self.id2Node.values())
 
+
     #mostra vettore dei padri
-    def getPadreFiglio(self):
+    def getGrafoPrim(self):
+        g = Grafo()
         lista_adiacenza_nodi_padri = {}
+        numero_archi = 0
         for nodo in self.getListaNodi():
             lista_adiacenza_nodi_padri.setdefault(nodo.nodo, [])
         for nodo in self.id2Node.values():
             #print(nodo.padre + " è padre di " + nodo.nodo)
             if nodo.nodo != nodo.padre:
+                numero_archi += 1
                 lista_adiacenza_nodi_padri[nodo.nodo].append(self.getNodo(nodo.padre))
                 lista_adiacenza_nodi_padri[nodo.padre].append(self.getNodo(nodo.nodo))
-        return lista_adiacenza_nodi_padri
+        
+        g.lista_adiacenza_nodi = lista_adiacenza_nodi_padri
+        g.n_archi = numero_archi
+        g.n_nodi = len(lista_adiacenza_nodi_padri.keys())
+        g.id2Node = copy.deepcopy(self.id2Node)
+
+        return g
 
     
 

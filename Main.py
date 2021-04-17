@@ -2,7 +2,7 @@ from Grafo import Grafo
 from Nodo import Nodo
 from Arco import Arco
 from heap import heap, HeapDecreaseKey, HeapExtractMin, HeapMinimum, BuildMinHeap, isIn
-from Utility import *
+from Utility import merge, mergeSort_weight, inizializzaGrafo, dfs_ciclo, findSet, union, makeSet, test_albero_supporto
 import random
 import os
 import math
@@ -255,6 +255,7 @@ def prim(g, radice):
     BuildMinHeap(q)
     while q.heapsize != 0:
         u = HeapExtractMin(q)
+        g.totPeso += u.key
         for arco in g.lista_adiacenza[u.nodo]:      #per ogni arco, in lista di adiacenza di u
             nodo_adj = g.getNodo(arco.nodo2)        #g.getNodo(arco.nodo2) = (oggetto) nodo adiacente a u
             if isIn(q,nodo_adj) == 1 and arco.peso < nodo_adj.key:
@@ -289,7 +290,8 @@ def naiveKruskal(g):
         visitati = [0]*(g.n_nodi+1)
 
         if not dfs_ciclo(prova_mst, g.getNodo(arco.nodo2), padri, visitati):
-                grafo_mst.aggiungiArco(arco)
+            grafo_mst.totPeso += arco.peso
+            grafo_mst.aggiungiArco(arco)
 
         else:
             prova_mst.lista_adiacenza_nodi[arco.nodo1].remove(prova_mst.getNodo(arco.nodo2))
@@ -312,6 +314,7 @@ def kruskal(g):
     for arco in g.lista_archi:
         
         if findSet(grafo, grafo.getNodo(arco.nodo1)) != findSet(grafo, grafo.getNodo(arco.nodo2)):
+            grafo.totPeso += arco.peso
             grafo.aggiungiArco(arco)
             union(grafo.getNodo(arco.nodo1), grafo.getNodo(arco.nodo2), grafo)
     
@@ -343,11 +346,16 @@ g1.printAdj() """
 #print()
 #print("PRIM")
 #print()
-for i in range(0, len(lista_grafi)-1):
-    prim(lista_grafi[i], lista_grafi[i].getNodo("6"))
-    lista_adiacenza = lista_grafi[i].getPadreFiglio()
-    g2 = kruskal(lista_grafi[i])
-    print(lista_grafi[i].n_nodi, lista_grafi[i].n_archi)
+for g in lista_grafi:
+    g1 = prim(g, g.getNodo("6"))
+    g1 = g1.getGrafoPrim()
+    k_g.append(g1)
+    #peso_prim = g1.totPeso
+    
+    g2 = kruskal(g)
+    k_g.append(g2)
+    #peso_k = g2.totPeso
+    
 
 #for nodo in lista_adiacenza:
     #print(nodo, [nodo.nodo for nodo in lista_adiacenza[nodo]] )
@@ -362,11 +370,22 @@ for i in range(0, len(lista_grafi)-1):
 #print()
 #print("KRUSKAL")
 #print()
-    #g3 = naiveKruskal(lista_grafi[i])
-#g3.printAdj()
+    #g3 = naiveKruskal(lista_grafi[0])
+    #k_g.append(g3)
+    #peso_kn = g3.totPeso
+    
+    
+    #if not peso_k == peso_prim:
+        #print(peso_k == peso_prim)
+
+
 #print("-"*30)
+#g2.printAdj()
+
 
 #print("KRUSKAL == KRUSKAL NAIVE?")
-    #print(checkMst(lista_adiacenza, g2.lista_adiacenza_nodi))
+    #print(checkMst(g3.lista_adiacenza_nodi, g2.lista_adiacenza_nodi))
 
 #print("-"*30)
+
+test_albero_supporto(k_g)

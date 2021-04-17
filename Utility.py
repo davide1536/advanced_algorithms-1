@@ -1,6 +1,5 @@
 #classe utile per la Union-Find e mergeSort
 #capitolo 21.3/4 del libro
-################# non testato #################
 import copy
 from Nodo import Nodo
 from Grafo import Grafo
@@ -56,6 +55,7 @@ def mergeSort_weight(array, p, r):
         mergeSort_weight(array, q+1, r)
         merge(array, p, q, r)
 
+
 # Complessità O(n)
 # - se G non ha un ciclo allora G è un albero ed m = n-1
 # - se G ha un ciclo allora dopo aver attraversato al più n archi la procedura termina 
@@ -80,8 +80,8 @@ def dfs_ciclo(g, u, padri, visitati):
 # funzione che dato in input il grafo g, inizializza il grafo n_g con gli stessi nodi
 def inizializzaGrafo(n_g, g):
         n_g.n_nodi = g.n_nodi
-        n_g.lista_nodi = g.lista_nodi
         n_g.id2Node = g.id2Node
+        n_g.lista_nodi = g.lista_nodi
         
         for nodo in n_g.getListaNodi():
             n_g.lista_adiacenza_nodi.setdefault(nodo.nodo, [])
@@ -94,6 +94,7 @@ def checkMst(adj_list1, adj_list2):
             return False
     return True
 
+
 def equals(l1, l2):
     l1 = [nodo.nodo for nodo in l1]
     l2 = [nodo.nodo for nodo in l2]
@@ -102,6 +103,7 @@ def equals(l1, l2):
     if l1 != l2:
         print(l1,l2)
     return l1 == l2
+
 
 # funzione che controlla se tutti i grafi di una lista sono uguali
 # prima lista prim
@@ -156,4 +158,31 @@ def findSet(g, nodo1):
     if nodo1.nodo != nodo1.padre:
         nodo1.padre = findSet(g, g.getNodo(nodo1.padre))
     return nodo1.padre
-    
+
+# controllo se l'mst risultante è un albero di supporto
+# grafo connesso con il minor numero di nodi
+# n_nodi = numero di nodi visitati
+def dfs_supporto(g, u, n_nodi, visitati):
+    visitati[int(u.nodo)] = 1
+    n_nodi.append('1')
+    for v in g.lista_adiacenza_nodi[u.nodo]:
+        if visitati[int(v.nodo)] == 0:
+            dfs_supporto(g, v, n_nodi, visitati)
+
+        
+# controllo 
+# se tutti i nodi sono stati visitati
+# se il numero di archi è il minimo : dati n nodi --> n-1 archi
+def test_albero_supporto(lista_grafi):
+    for grafo in lista_grafi:
+        visitati = [0]*(grafo.n_nodi + 1)
+        n_nodi = []
+        dfs_supporto(grafo, grafo.getNodo("6"), n_nodi, visitati)
+        print(grafo.n_nodi == len(n_nodi) and (grafo.n_archi + 1) == len(n_nodi))
+
+
+
+
+
+
+
