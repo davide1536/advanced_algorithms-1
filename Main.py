@@ -28,7 +28,7 @@ lista_grafi = []
 def parsing():
     global directory
     for file in os.listdir(directory):
-        if not (file.endswith("100000.txt") or file.endswith("80000.txt") or file.endswith("40000.txt") or file.endswith("20000.txt")):
+        #if not (file.endswith("100000.txt") or file.endswith("80000.txt") or file.endswith("40000.txt") or file.endswith("20000.txt")):
         #if file.endswith("03_10.txt"):
             crea_grafi(file)
 
@@ -115,8 +115,9 @@ def measure_run_time(n_instances, graphs, algorithm):
     #liste per confrontare gli algoritmi
     global p_g
     global k_g
+    print("testing graph size: ", graphs[0].n_nodi)
     for i in range(n_instances):
-        print ("testo la ", i, "instanza")
+        print("istanza numbero: ",i)
         if algorithm == "prim":
             gc.disable()
             nodo_casuale = next(iter(graphs[i].lista_nodi))    #casuale perchè il set lista_nodi cambia ordine ad ogni parsing
@@ -174,9 +175,10 @@ def measurePerformance():
     totRatios = []
     totConstant = []
     for algorithm in algorithmsToTest:
+        print("sto testando", algorithm)
         times = [measure_run_time(len(graphs_groupped[key]), graphs_groupped[key], algorithm) for key in graphs_groupped]
         totTimes.append(times)
-        ratios = [None] + [round(times[i+1]/times[i],3) for i in range(len(sizes)-1)]
+        ratios = [None] + [round(times[i+1]/times[i],3) for i in range(len(sizes)-1)] 
         totRatios.append(ratios)
 
         if algorithm == "NaiveKruskal":
@@ -184,7 +186,7 @@ def measurePerformance():
         else:
             totConstant.append([round(times[i]/(sizes[i][1] * math.log(sizes[i][0])),3) for i in range(len(sizes))])
 
-    return [totTimes, totRatios, totConstant, sizes, graphs_groupped]
+    return totTimes, totRatios, totConstant, sizes, graphs_groupped
     
 
 
@@ -192,7 +194,7 @@ def plot_graph():
     
 
     #misuro le performance per ogni algoritmo, i valori times, ratios, constant sono matrici di dimensione 4*n n sono il numero di dimensioni dei grafi
-    times, ratios, constant, sizes, graphs_groupped = measurePerformance()
+    [times, ratios, constant, sizes, graphs_groupped] = measurePerformance()
     #times = [measure_run_time(len(graphs_groupped[key]), graphs_groupped[key], "prim") for key in graphs_groupped]
     #grandezza gruppi
 
@@ -226,10 +228,10 @@ def plot_graph():
         reference = []
         if algorithmsToTest[i] == "NaiveKruskal":
             for j in range (len(sizes)):
-                reference.append (constant[i][len(constant)-1] * sizes[j][1] * sizes[j][0])
+                reference.append (constant[i][len(constant)] * sizes[j][1] * sizes[j][0])
         else:
             for j in range (len(sizes)):
-                reference.append (constant[i][len(constant)-1] * sizes[j][1] * math.log(sizes[j][0]))
+                reference.append (constant[i][len(constant)] * sizes[j][1] * math.log(sizes[j][0]))
 
         plt.plot(graphs_groupped.keys(), times[i], graphs_groupped.keys(), reference)
         plt.title("performance " + algorithmsToTest[i])
@@ -243,8 +245,11 @@ def plot_graph():
 def prim(g, radice):
     radice.padre = radice.nodo
     lista_nodi_obj = g.getListaNodi()
+    index = 0
     for nodo in lista_nodi_obj:
         nodo.key = float('inf')  #float('inf') indica un valore superiore a qualsiasi altro valore
+        nodo.heapIndex = index  #per non usare la funzione 'index' 
+        index = index + 1
     radice.key = 0
     q = heap(lista_nodi_obj)
     BuildMinHeap(q)
@@ -254,9 +259,11 @@ def prim(g, radice):
             nodo_adj = g.getNodo(arco.nodo2)        #g.getNodo(arco.nodo2) = (oggetto) nodo adiacente a u
             if isIn(q,nodo_adj) == 1 and arco.peso < nodo_adj.key:
                 nodo_adj.padre = u.nodo
+                index = nodo_adj.heapIndex  #ottengo la sua posizione all'interno dell'heap
                 #nodo_adj.key = arco.peso
                 #HeapDecreaseKey(q, q.vector.index(nodo_adj), nodo_adj.key)
-                HeapDecreaseKey(q, q.vector.index(nodo_adj), arco.peso)
+                #HeapDecreaseKey(q, q.vector.index(nodo_adj), arco.peso)
+                HeapDecreaseKey(q, index, arco.peso)
     return g
 
 
@@ -316,9 +323,9 @@ def kruskal(g):
 
 parsing()
 #plot_graph()
-confrontaGrafi(p_g, k_g)
+#confrontaGrafi(p_g, k_g)
 #print("FINE PARSING")
-#plot_graph()
+plot_graph()
 #print("fine esecuzione")
 
 
@@ -337,9 +344,10 @@ g1.printAdj() """
 #print("PRIM")
 #print()
 for i in range(0, len(lista_grafi)-1):
-    # prim(lista_grafi[i], lista_grafi[i].getNodo("6"))
+    prim(lista_grafi[i], lista_grafi[i].getNodo("6"))
     lista_adiacenza = lista_grafi[i].getPadreFiglio()
     g2 = kruskal(lista_grafi[i])
+    print(lista_grafi[i].n_nodi, lista_grafi[i].n_archi)
 
 #for nodo in lista_adiacenza:
     #print(nodo, [nodo.nodo for nodo in lista_adiacenza[nodo]] )
@@ -354,11 +362,11 @@ for i in range(0, len(lista_grafi)-1):
 #print()
 #print("KRUSKAL")
 #print()
-    g3 = naiveKruskal(lista_grafi[i])
+    #g3 = naiveKruskal(lista_grafi[i])
 #g3.printAdj()
 #print("-"*30)
 
 #print("KRUSKAL == KRUSKAL NAIVE?")
-    print(checkMst(g3.lista_adiacenza_nodi, g2.lista_adiacenza_nodi))
+    #print(checkMst(lista_adiacenza, g2.lista_adiacenza_nodi))
 
 #print("-"*30)

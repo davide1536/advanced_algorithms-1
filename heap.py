@@ -32,9 +32,19 @@ def MinHeapify (h, i):
     if r <= h.heapsize-1 and h.vector[r].key < h.vector[minimum].key:
         minimum = r
     if minimum != i:
-        temp = h.vector[i]
-        h.vector[i] = h.vector[minimum]
-        h.vector[minimum] = temp
+        #salvo gli indici
+        indexCurrent = h.vector[i].heapIndex
+        indexMinimum = h.vector[minimum].heapIndex
+        #scambio gli indici
+        h.vector[i].heapIndex = indexMinimum
+        h.vector[minimum].heapIndex = indexCurrent
+        #scambio i valori
+        #temp = h.vector[i]                  #devo sia scambiare i valori ma anche l'indice associato ad ogni valore
+        h.vector[i], h.vector[minimum] = h.vector[minimum], h.vector[i]
+        #h.vector[minimum] = temp
+
+
+
         return MinHeapify(h,minimum)
 
 def HeapDecreaseKey(h, i, key):
@@ -42,9 +52,18 @@ def HeapDecreaseKey(h, i, key):
         exit("la nuova chiave è più grande di quella corrente")
     h.vector[i].key = key
     while i>0 and h.vector[parent(i)].key > h.vector[i].key:
-        temp = h.vector[i]
-        h.vector[i] = h.vector[parent(i)]
-        h.vector[parent(i)] = temp
+        #salvo gli indici
+        currentIndex = h.vector[i].heapIndex
+        parentIndex = h.vector[parent(i)].heapIndex
+
+        #scambio gli indici
+        h.vector[i].heapIndex = parentIndex
+        h.vector[parent(i)].heapIndex = currentIndex
+
+        #scambio i valori
+        #temp = h.vector[i]
+        h.vector[i], h.vector[parent(i)] = h.vector[parent(i)], h.vector[i]
+        #h.vector[parent(i)] = temp
         i = parent(i)
 
 # def MinHeapInsert(h, key):
@@ -61,6 +80,7 @@ def HeapExtractMin(h):
         print ("underflow dell'heap")
     minimum = h.vector[0]
     h.vector[0] = h.vector[h.heapsize-1]
+    h.vector[0].heapIndex = 0
     h.heapsize = h.heapsize - 1
     MinHeapify(h, 0)
     minimum.in_h = 0
@@ -79,14 +99,16 @@ def left(index):
 
 def parent(index):
     return (index-1)//2 
-nodes =[
-Nodo(1, 2, 4),
-Nodo(2, 3, 10),
-Nodo(3, 1, 7),
-Nodo(4, 1, 2),
-Nodo(5, 2, 1)
-]
-#esempio heap, togliere il commento per provare
+
+
+# nodes =[
+# Nodo(1, 2, 4),
+# Nodo(2, 3, 10),
+# Nodo(3, 1, 7),
+# Nodo(4, 1, 2),
+# Nodo(5, 2, 1)
+# ]
+# #esempio heap, togliere il commento per provare
 
 # h = heap(nodes)
 # print(h.heapsize, h.length)
