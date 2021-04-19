@@ -1,15 +1,15 @@
-#DESCRIZIONE CLASSE E FUNZIONI HEAP:
-#La classe heap è costituita da:
-    #vettore associato all'heap
-    #lunghezza del vettore
-    #lunghezza dell'heap (che all'inizio equivale alla lunghezza del vettore)
-#Le funzioni disponibili sono:
-    #BuildMinHeap(h) --> h = oggetto heap, la funzione dato un oggetto heap h costruisce una minHeap
-    #HeapDecreaseKey(h, i, key) --> h = oggetto heap, i=valore indice, key = nuova chiave, dato un oggetto heap h sostituisce il valore del vettore associato
-                                                                                            #all'indice i con il nuovo valore key
-    #MinHeapInsert(h, key) --> h= heap, key = nuovo valore da aggiungere all'heap, dato un oggetto heap aggiungo un nuovo valore key
-    #HeapMinimum(h) --> ottengo il valore minimo dell'heap
-    #HeapExtractMin(h) --> recupera il valore minimo dall'heap e eliminalo
+# DESCRIZIONE CLASSE E FUNZIONI HEAP:
+# La classe heap è costituita da:
+#     vettore associato all'heap
+#     lunghezza del vettore
+#     lunghezza dell'heap (che all'inizio equivale alla lunghezza del vettore)
+# Le funzioni disponibili sono:
+#     BuildMinHeap(h) --> h = oggetto heap, la funzione dato un oggetto heap h costruisce una minHeap
+#     HeapDecreaseKey(h, i, key) --> h = oggetto heap, i=valore indice, key = nuova chiave, dato un oggetto heap h sostituisce il valore del vettore associato
+#                                                                                             all'indice i con il nuovo valore key
+#     MinHeapInsert(h, key) --> h= heap, key = nuovo valore da aggiungere all'heap, dato un oggetto heap aggiungo un nuovo valore key
+#     HeapMinimum(h) --> ottengo il valore minimo dell'heap
+#     HeapExtractMin(h) --> recupera il valore minimo dall'heap e eliminalo
 from Nodo import Nodo
 class heap:
     def __init__(self, vector):
@@ -101,6 +101,9 @@ def parent(index):
     return (index-1)//2 
 
 
+
+
+
 # nodes =[
 # Nodo(1, 2, 4),
 # Nodo(2, 3, 10),
@@ -137,4 +140,6 @@ def parent(index):
 
 # for i in range (h.heapsize):
 #     print("estrazione nodo:", h.vector[i].nodo, h.vector[i].key)
+
+
 

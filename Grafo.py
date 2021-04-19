@@ -71,6 +71,7 @@ class Grafo:
         g.n_archi = numero_archi
         g.n_nodi = len(lista_adiacenza_nodi_padri.keys())
         g.id2Node = copy.deepcopy(self.id2Node)
+        g.totPeso = self.totPeso
 
         return g
 
