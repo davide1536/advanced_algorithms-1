@@ -1,0 +1,37 @@
+\section{Algoritmo di Kruskal -- Union-Find}
+\label{Algoritmo_di_Kruskal_Union-Find}
+
+L'algoritmo di Kruskal, utilizzando la struttura dati \textit{Union-Find}, permette di costruire un MST aggiungendo ad ogni iterazione un nuovo arco di costo minimo all'insieme grafo, se i vertici di questo non ne fanno già parte. \\
+La struttura dati \textit{Union-Find} gestisce insiemi disgiunti di oggetti, ciò significa che un oggetto può stare in uno e uno solo dei sottoinsiemi degli insiemi disgiunti presenti nell'\textit{Union-Find}.
+
+\subsection{Strutture dati}
+\label{strutture_dati}
+
+Le strutture dati utilizzate per implementare questo algoritmo sono:
+
+\begin{itemize}
+    \item classe Grafo;
+    \item classe Arco;
+    \item metodo inizializzaGrafo(n\_g, g);
+    \item metodo MakeSet(nodo);
+    \item metodo FindSet(nodo1, nodo2, g);
+    \item metodo Union(g, nodo1).
+\end{itemize}
+
+La descrizione si può trovare alla sezione \textsc{1.2 Classi}.
+
+\subsection{Implementazione}
+\label{implementazione}
+
+Questo algoritmo è stato implementato nel seguente modo:
+
+\begin{itemize}
+    \item è stato definito un grafo \texttt{grafo} e inizializzato con gli stessi nodi del grafo \texttt{g} dato in input. Ad ogni iterazione, sono stati aggiunti a \texttt{grafo} gli archi che sarebbero andati a costruire la soluzione finale;
+    \item tutti i nodi del \texttt{grafo} sono stati inizializzati come alberi con un solo nodo;
+    \item utilizzando l'algoritmo di MergeSort è stata ordinata la lista degli archi del grafo in maniera crescente;
+    \item è stata iterata la lista ordinata, e per ogni arco si è controllato, guardando la radice, se gli insiemi dei suoi nodi coincidevano. Se le radici dei nodi erano diverse si giungeva alla conclusione che le due componenti erano distinte e quindi l'arco poteva essere aggiunto al grafo \texttt{grafo}, aggiornando le componenti connesse.
+\end{itemize}
+
+
+\subsection{Complessità}
+\label{complessità}

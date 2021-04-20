@@ -1,0 +1,131 @@
+\section{Introduzione}
+\label{Introduzione}
+
+In questa relazione viene descritta l'implementazione e lo studio delle performance di tre algoritmi \texttt{Prim, Kruskal naive e Kruskal con implementazione Union-Find} i quali prendono in input un grafo non diretto, connesso e pesato, e come output restituiscono il minimum spanning tree che tocca tutti i nodi del grafo e che minimizza la somma totale dei pesi di tutti i lati dell'albero.
+Per ciascun algoritmo verrà riportata la nostra implementazione e i corrispondenti risultati ottenuti.
+
+\section{Classi}
+\label{Classi}
+
+Per implementare gli algoritmi sono state create 4 classi di oggetti, una classe di Utility e un Main.
+
+\subsection{Arco}
+\label{Arco}
+
+L'oggetto \textit{Arco} contiene le infomazioni relative ad un arco:
+
+\begin{itemize}
+    \item \textbf{nodo1}: nodo iniziale;
+    \item \textbf{nodo2}: nodo finale;
+    \item \textbf{peso}: peso dell'arco;
+    \item \textsc{getArco()}: funzione che restituisce una lista [nodo1, nodo2, peso]
+    \item \textsc{getArcoInverso()}: funzione che, chiamata su un arco \emph{(u,v)} , ne restituisce l'inverso \emph{(v,u)}
+\end{itemize}
+
+\subsection{Grafo}
+\label{Grafo}
+
+L'oggetto \textit{Grafo} contiene le informazioni relative ad un grafo:
+
+\begin{itemize}
+    \item \textbf{n\_nodi}: campo dati che indica il numero dei nodi;
+    \item \textbf{n\_archi}: campo dati che indica il numero degli archi;
+    \item \textbf{lista\_nodi}: campo dati che contiene un insieme set() di nodi; 
+    \item \textbf{lista\_archi}: campo dati che contiene la lista di oggetti arco;
+    \item \textbf{id2Node}: Dizionario avente come campo key l'identificatore di un nodo (intero) e come valore l'oggetto nodo corrispondente a quell'identificativo;
+    \item \textbf{lista\_adiacenza}:Dizionario avente come campo key l'intero corrispondente ad un nodo,  e come valore la lista di archi adiacenti al nodo;
+    \item \textbf{lista\_adiacenza\_nodi}: Dizionario avente come campo key l'intero corrispondente ad un nodo,  e come valore la lista di oggetti nodi adiacenti al nodo;
+    \item \textbf{totPeso}: campo dati che indica il peso totale degli archi del grafo, calcolato da uno degli algoritmi presentati;
+    \item \textsc{aggiungiArco(arco)}: metodo che dato in input un arco lo aggiunge agli archi del grafo;
+    \item \textsc{getNodo(id\_nodo)}: metodo che dato in input l'id di un nodo restituisce l'oggetto del nodo corrispondente;
+    \item \textsc{getListaNodi()}: metodo che restituisce la lista di  oggetti nodi;
+    \item \textsc{getGrafoPrim()}: metodo che, utilizzando le relazioni padre-figlio risultanti dall'algoritmo Prim, restituisce un nuovo grafo basato su tali relazioni (utile per i test).
+\end{itemize}
+
+\subsection{Nodo}
+\label{Nodo}
+
+L'oggetto \textit{Nodo} contiene le informazioni relative ad un nodo:
+
+\begin{itemize}
+    \item \textbf{nodo}: Intero identificativo del nodo;
+    \item \textbf{padre}: Intero che identifica il padre v di un nodo u nell'albero di copertura minimo;
+    \item \textbf{key}: Campo utilizzato per costruire il min heap, inizializzato con il peso dell'arco adiacente al nodo. Ad esempio il campo key del nodo \emph{u} sarà inizializzato con il valore \emph{w(u,v)};
+    \item \textbf{in\_h}: Intero per verificare se un nodo è stato estratto dall'heap o meno;
+    \item \textbf{vis}: Intero per verificare se un nodo è stato visitato o meno nella procedura dfs
+    \item \textbf{heapIndex}:Indice utilizzato per tenere traccia della posizione di ogni nodo all'interno dell'heap
+\end{itemize}
+
+\subsection{Utility}
+\label{Utility}
+
+La classe \textit{Utility} contiene le funzioni che ci sono servite per implementare i tre algoritmi. 
+
+\begin{itemize}
+    \item \textsc{inizializzaGrafo(n\_g, g)}: metodo che prende in input un grafo \textsc{g} ed inizializza il grafo \textsc{n\_g} con gli stessi nodi.
+\end{itemize} 
+
+All'interno di questa classe troviamo tre metodi che sono stati utilizzati per implementare \textsc{Kruskal - Union-Find}, in particolare:
+\begin{itemize}
+    \item \textsc{MakeSet(nodo)}: metodo che prende in input un nodo e lo inizializza come padre di sé stesso;
+    \item \textsc{Union(nodo1, nodo2, g)}: metodo che prende in input due nodi e un grafo e, se questi due nodi fanno parte di due insiemi disguinti diversi, unisce le componenti connesse che li contengono, facendo puntare la radice dell'albero con profondità minima a quella del secondo albero, minimizzando quindi la profondità totale;
+    \item \textsc{FindSet(g, nodo1)}: metodo che ritorna la radice dell'insieme in cui è contenuto il nodo1 passato in input, risalendo di padre in padre fino a trovare un self-loop (ossia un elemento che punta a sé stesso). 
+\end{itemize}
+
+\newpage
+
+\subsection{Heap}
+\label{Heap}
+
+L'oggetto \textit{Heap} contiene le funzioni che permettono di realizzare un \textit{min-heap}. Uno heap è una struttura dati che si può considerare un albero binario quasi completo, ovvero un albero nel quale tutti i livelli sono riempiti quasi completamente tranne l'ultimo. Le caratteristiche dello heap sono:
+
+\begin{itemize}
+    \item l'ultimo livello incompleto si riempie da sinistra;
+    \item l'albero viene rappresentato sotto forma di array A che è caratterizzato da \textit{A.length} che rappresenta la lunghezza di A e \textit{A.heapsize} che rappresenta la dimensione dello heap.
+\end{itemize}
+
+Per implementare l'algoritmo è stato realizzato un \textit{min-heap}, uno heap caratterizzato da nodi con la chiave minore o uguale a quella dei figli. Quindi la radice rappresenta l'elemento più piccolo del \textit{min-heap}.
+
+L'oggetto \textit{Nodo} contiene:
+
+\begin{itemize}
+    \item \textbf{vector}: vettore associato allo heap;
+    \item \textbf{length}: lunghezza del vettore;
+    \item \textbf{heapsize}: lunghezza dello heap;
+    \item \textsc{BuildMinHeap(h)}: metodo che dato in input l'oggetto heap, costruisce un \textit{min-heap};
+    \item \textsc{MinHeapify(h, i)}: metodo che dato in input un vettore e un nodo, sistema il nodo nella posizione corretta;
+    \item \textsc{HeapDecreaseKey(h, i ,key)}: metodo che dato in input uno heap, un indice ed una nuova chiave, sostituisce il valore del vettore associato all'indice i con il nuovo valore key;
+    \item \textsc{HeapMinimum(h)}: metodo che dato in input un heap, restituisce il valore minimo dello heap, ossia la radice;
+    \item \textsc{HeapExtractMin(h)}: metodo che dato in input un heap, trova l'elemento più piccolo, lo rimuove e ritorna l'oggetto;
+    \item \textsc{isIn(h, v)}:
+    \item \textsc{right(index)}: metodo che, dato in input un indice di un nodo, restituisce l'indice del nodo figlio destro;
+    \item \textsc{left(index)}: metodo che, dato in input un indice di un nodo, restituisce l'indice del nodo figlio sinistro;
+    \item \textsc{parent(index)}:metodo che, dato in input un indice di un nodo, restituisce l'indice del padre;
+\end{itemize}
+
+
+\newpage
+
+\subsection{Main}
+\label{Main}
+
+La classe \textit{Main} contiene il dataset dei grafi dopo l'esecuzione del parsing, le funzioni di parsing, di misurazione di performance e le implementazioni degli algoritmi:
+
+\begin{itemize}
+    \item \textsc{parsing(directory)}: funzione che, data in input una directory, analizza tutti i file interni e seleziona solo quelli con estensione .txt, fornendoli in input alla funzione crea\_grafi();
+    \item \textsc{crea\_grafi(file)}: funzione che, dato in input un file, lo legge ed estrae le informazioni per la creazione di oggetti Grafo, Nodo e Arco;
+    \item \textsc{plot\_graph()}: plot\_graph è una funzione che viene utilizzata per creare i grafici delle performance degli algoritmi utilizzati ;
+    
+    \item \textsc{measurePerformance()}:measurePerformance() è la funzione che viene utilizzata per calcolare tutte quelle metriche utili per valutare le performance di un algoritmo e per creare il successivo grafico. Le metriche calcolate sono:
+    \begin{itemize}
+        \item  totTimes:  totTimes è una matrice avente di dimensionalità $mxn$ dove m è uguale al numero di algoritmi testati mentre n è il numero di dimensionalità di grafi considerati.
+        \item totRatios: totRatios è una matrice della stessa dimensionlità di totTimes contenente tutti i ratio tra il tempo di calcolo medio tra le istanze di dimensionalità $n$ e il tempo di calcolo medio tra le istante di dimensionalità $m$ tale che $m>n$
+        \item  totConstant:  totConstant è una matrice contenente le costanti nascoste per ogni algoritmo e per ogni dimensionalità di input considerata
+    \end{itemize};
+    \item \textsc{measure\_run\_time(n\_instances, graphs, algorithm)}: measure\_run\_time è la funzione chiamata da  measurePerformance() per calcolare i tempi per ciascun algoritmo. Per aumentare l'affidabilità delle misurazioni per istanze di bassa dimensionalità (numero di nodi <= 100) gli algoritmi sono stati ripetuti più volte (30) e poi il tempo è stato calcolato dividendo il tempo totale per questo numero di iterazioni. Per ottenere un ulteriore grado di accuratezza sulle misurazioni sono state testati 4 input della stessa dimensionalità $n$ per ogni $n$ e anche qui poi è stata presa la media.;
+    
+    \item \textsc{plot\_graph())}: .
+\end{itemize}
+
+
+\newpage
