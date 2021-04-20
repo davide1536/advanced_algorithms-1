@@ -15,8 +15,13 @@ import collections
 import matplotlib.pyplot as plt
 import copy
 
+#lista di grafi prim
 p_g = []
+#lista grafi kruskal
 k_g = []
+#lista grafi kruskal naive
+kn_g = []
+
 #per_m = "algoritmi-avanzati-laboratorio/"
 per_m = ""
 #togliere per_m
@@ -25,11 +30,9 @@ lista_grafi = []
 
 
 
-def parsing():
-    global directory
+def parsing(directory):
     for file in os.listdir(directory):
         if not (file.endswith("100000.txt") or file.endswith("80000.txt") or file.endswith("40000.txt") or file.endswith("20000.txt")):
-        #if file.endswith("03_10.txt"):
             crea_grafi(file)
 
 
@@ -48,7 +51,7 @@ def crea_grafi(path):
     
     f = open(per_m+"mst_dataset/" + path, "r")
 
-    #creo il primo grafo di prova
+    #assegno i valori numero nodi e numero archi
     prima_riga = f.readline().split(" ")
     g.n_nodi = int(prima_riga[0]) 
     g.n_archi = int(prima_riga[1])
@@ -63,32 +66,29 @@ def crea_grafi(path):
     f.close()
         
 
-    #creo i set di nodi e lista archi
+    #creo il set di nodi e lista archi
     for i in range(0, len(lista_valori)):
         #valori estratti dal file
         nodo_1 = lista_valori[i][0]
         nodo_2 = lista_valori[i][1]
         peso = lista_valori[i][2]
         arco_1 = Arco(nodo_1, nodo_2, peso)
-        #arco_2 = Arco(nodo_2, nodo_1, peso)
         
         lista_nodi.add(nodo_1)
         lista_nodi.add(nodo_2)
         lista_adiacenza.setdefault(nodo_1, [])    #inzializzo ogni chiave nodo a un valore list
-        lista_adiacenza.setdefault(nodo_2, [])    #inzializzo ogni chiave nodo a un valore list
+        lista_adiacenza.setdefault(nodo_2, [])    
         lista_adiacenza_nodi.setdefault(nodo_1, [])
         lista_adiacenza_nodi.setdefault(nodo_2, [])
 
-        #forse non serve una lista archi
         lista_archi.append(arco_1)
-        #lista_archi.append(arco_2)
     
+    #creo gli oggetti nodo e il dizionario id2Node
     for nodo in lista_nodi:
-        #se serve un oggetto nodo, crearlo qui!!!!
         obj_nodo = Nodo(nodo)
         id2Node[obj_nodo.nodo] = obj_nodo
 
-
+    #riempio le liste di adicenza create in precedenza
     for i in range(0, len(lista_valori)):
         nodo_1 = lista_valori[i][0]
         nodo_2 = lista_valori[i][1]
@@ -98,6 +98,7 @@ def crea_grafi(path):
         lista_adiacenza[nodo_1].append(Arco(nodo_1, nodo_2, peso))      #arco(u,v)
         lista_adiacenza[nodo_2].append(Arco(nodo_2, nodo_1, peso))      #arco(v,u)
     
+    #setto gli attributi dell'arco
     g.id2Node = id2Node
     g.lista_nodi = lista_nodi
     g.lista_archi = lista_archi
@@ -129,15 +130,16 @@ def measure_run_time(n_instances, graphs, algorithm):
 
             start_time = perf_counter_ns()
             for j in range(iterations):
-                p_g.append(prim(graphs[i],graphs[i].getNodo(nodo_casuale)))
+                g = prim(graphs[i],graphs[i].getNodo(nodo_casuale))
             end_time = perf_counter_ns()
+            p_g.append(prim(graphs[i],graphs[i].getNodo(nodo_casuale)).getGrafoPrim())
             gc.enable()
 
         if algorithm == "NaiveKruskal":
             gc.disable()
             start_time = perf_counter_ns()
             for j in range(iterations):
-                naiveKruskal(graphs[i])
+                kn_g.append(naiveKruskal(graphs[i]))
             end_time = perf_counter_ns()
             gc.enable()
 
@@ -203,17 +205,8 @@ def measurePerformance():
 
 def plot_graph():
     
-
     #misuro le performance per ogni algoritmo, i valori times, ratios, constant sono matrici di dimensione 4*n n sono il numero di dimensioni dei grafi
     [times, ratios, constant, sizes, graphs_groupped] = measurePerformance()
-    #times = [measure_run_time(len(graphs_groupped[key]), graphs_groupped[key], "prim") for key in graphs_groupped]
-    #grandezza gruppi
-
-    #sizes = [key for key in graphs_groupped]
-    #calcolo ratios e costant
-    #ratios = [None] + [round(times[i+1]/times[i],3) for i in range(len(sizes)-1)]
-    #c_estimates = [round(times[i]/sizes[i],3) for i in range(len(sizes))]
-    #c_estimates = [round(times[i]/(sizes[i][1] * math.log(sizes[i][0])),3) for i in range(len(sizes))]
     algorithmsToTest = ["prim","Kruskal", "NaiveKruskal"]
 
     for i in range(len(algorithmsToTest)):
@@ -228,12 +221,6 @@ def plot_graph():
                 print(sizes[j][0], '', times[i][j], '', constant[i][j], '', ratios[i][j], sep="\t")
         print(65*"-")
 
-
-    #for key in graphs_groupped:
-        #print("il grafo con ", key, "nodi ci ha messo (in media):")
-        #time = measure_run_time(len(graphs_groupped[key]), graphs_groupped[key], "prim")
-        #print (time, "secondi")
-        #times.append(time)
 
     #grafico dei tempi
         reference = []
@@ -273,9 +260,6 @@ def prim(g, radice):
             if isIn(q,nodo_adj) == 1 and arco.peso < nodo_adj.key:
                 nodo_adj.padre = u.nodo
                 index = nodo_adj.heapIndex  #ottengo la sua posizione all'interno dell'heap
-                #nodo_adj.key = arco.peso
-                #HeapDecreaseKey(q, q.vector.index(nodo_adj), nodo_adj.key)
-                #HeapDecreaseKey(q, q.vector.index(nodo_adj), arco.peso)
                 HeapDecreaseKey(q, index, arco.peso)
     return g
 
@@ -340,69 +324,9 @@ def kruskal(g):
 
 ######################## MAIN ########################
 
-parsing()
+parsing(directory)
 plot_graph()
-#confrontaGrafi(p_g, k_g)
-#print("FINE PARSING")
-#plot_graph()
-#print("fine esecuzione")
+test_albero_supporto(k_g)
+test_albero_supporto(p_g)
 
 
-########### NAIVE-KRUSKAL ###########
-""" print("-"*30)
-print()
-print("NAIVE-KRUSKAL")
-print()
-g1 = naiveKruskal(lista_grafi[0])
-g1.printAdj() """
-
-
-############### PRIM ################
-#print("-"*30)
-#print()
-#print("PRIM")
-#print()
-#for g in lista_grafi:
-    #g1 = prim(g, g.getNodo("6"))
-    #g1 = g1.getGrafoPrim()
-    #k_g.append(g1)
-    #peso_prim = g1.totPeso
-    
-    #g2 = kruskal(g)
-    #k_g.append(g2)
-    #peso_k = g2.totPeso
-    #print("peso: ",peso_prim == peso_k)
-    
-
-#for nodo in lista_adiacenza:
-    #print(nodo, [nodo.nodo for nodo in lista_adiacenza[nodo]] )
-
-#print("-"*30)
-#print("PRIM == KRUSKAL NAIVE?")
-#print(checkMst(lista_adiacenza, g1.lista_adiacenza_nodi))
-
-
-############### KRUSKAL #############
-#print("-"*30)
-#print()
-#print("KRUSKAL")
-#print()
-    #g3 = naiveKruskal(g)
-    #k_g.append(g3)
-    #peso_kn = g3.totPeso
-    
-    
-    #if not peso_k == peso_prim:
-    #print(peso_kn == peso_k)
-
-
-#print("-"*30)
-#g2.printAdj()
-
-
-#print("KRUSKAL == KRUSKAL NAIVE?")
-    #print(checkMst(g3.lista_adiacenza_nodi, g2.lista_adiacenza_nodi))
-
-#print("-"*30)
-
-#test_albero_supporto(k_g)

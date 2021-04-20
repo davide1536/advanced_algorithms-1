@@ -5,7 +5,7 @@ from Nodo import Nodo
 from Grafo import Grafo
 
 
-################# Merge + MergeSort #################
+################################## Merge + MergeSort ##################################
 
 # algoritmo merge modificato per confrontare i pesi degli archi, data una lista archi
 # p, q, r sono indici dell'array tali che p <= q < r
@@ -56,6 +56,9 @@ def mergeSort_weight(array, p, r):
         merge(array, p, q, r)
 
 
+################################## DFS_ciclo + inizializzaGrafo ##################################
+
+
 # Complessità O(n)
 # - se G non ha un ciclo allora G è un albero ed m = n-1
 # - se G ha un ciclo allora dopo aver attraversato al più n archi la procedura termina 
@@ -87,55 +90,14 @@ def inizializzaGrafo(n_g, g):
             n_g.lista_adiacenza_nodi.setdefault(nodo.nodo, [])
             n_g.lista_adiacenza.setdefault(nodo.nodo, [])
 
-# funzione che controlla se 2 liste di adiacenza sono uguali
-def checkMst(adj_list1, adj_list2):
-    for key in adj_list1.keys():
-        if not equals(adj_list1[key],adj_list2[key]):
-            return False
-    return True
 
 
-def equals(l1, l2):
-    l1 = [nodo.nodo for nodo in l1]
-    l2 = [nodo.nodo for nodo in l2]
-    l1.sort()
-    l2.sort()
-    if l1 != l2:
-        print(l1,l2)
-    return l1 == l2
-
-
-# funzione che controlla se tutti i grafi di una lista sono uguali
-# prima lista prim
-# seconda lista kruskal
-def confrontaGrafi(l_grafi1, l_grafi2):
-    for i in range(0, len(l_grafi1)-1):
-        
-        lista_adj_1 = l_grafi1[i].getPadreFiglio()
-        lista_adj_2 = l_grafi2[i].lista_adiacenza_nodi
-        
-        print(checkMst(lista_adj_1, lista_adj_2))
-
-
-
-################# Union-Find #################
+################################## Union-Find ##################################
 
 def makeSet(nodo):
     nodo.padre = nodo.nodo
     nodo.size = 0
 
-#union-by-rank
-def link(nodo1, nodo2):
-    if nodo1.size > nodo2.size:
-        nodo2.padre = nodo1.nodo
-    else:
-        nodo1.padre = nodo2.nodo
-        if nodo1.size == nodo2.size:
-            nodo2.size += 1
-
-#union-by-rank
-def union2(nodo1, nodo2):
-    link(nodo1, nodo2)
 
 #union-by-size
 def union(nodo1, nodo2, g):
@@ -153,11 +115,15 @@ def union(nodo1, nodo2, g):
         r2.size += r1.size
 
 
-
+#operazione find set con compressione del cammino
 def findSet(g, nodo1):
     if nodo1.nodo != nodo1.padre:
         nodo1.padre = findSet(g, g.getNodo(nodo1.padre))
     return nodo1.padre
+
+
+
+################################## Funzioni di Test ##################################
 
 # controllo se l'mst risultante è un albero di supporto
 # grafo connesso con il minor numero di nodi
@@ -169,9 +135,8 @@ def dfs_supporto(g, u, n_nodi, visitati):
         if visitati[int(v.nodo)] == 0:
             dfs_supporto(g, v, n_nodi, visitati)
 
-        
-# controllo 
-# se tutti i nodi sono stati visitati
+# input lista_grafi per ogni algoritmo
+# controllo se tutti i nodi sono stati visitati
 # se il numero di archi è il minimo : dati n nodi --> n-1 archi
 def test_albero_supporto(lista_grafi):
     for grafo in lista_grafi:

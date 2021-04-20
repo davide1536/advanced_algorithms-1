@@ -104,42 +104,5 @@ def parent(index):
 
 
 
-# nodes =[
-# Nodo(1, 2, 4),
-# Nodo(2, 3, 10),
-# Nodo(3, 1, 7),
-# Nodo(4, 1, 2),
-# Nodo(5, 2, 1)
-# ]
-# #esempio heap, togliere il commento per provare
-
-# h = heap(nodes)
-# print(h.heapsize, h.length)
-# for i in range (h.heapsize):
-#     print("nodi iniziali; ",h.vector[i].nodo)
-
-# BuildMinHeap(h)
-
-# print("\n")
-
-# for i in range (h.heapsize):
-#     print("nodi finali:", h.vector[i].nodo, h.vector[i].key)
-
-
-# HeapDecreasKey(h, 2, 0)
-
-# print("\n")
-
-# for i in range (h.heapsize):
-#     print("nodo modificato:", h.vector[i].nodo, h.vector[i].key)
-
-# print(HeapMinimum(h).key, HeapMinimum(h).nodo)
-# print(HeapExtractMin(h))
-
-# print("\n")
-
-# for i in range (h.heapsize):
-#     print("estrazione nodo:", h.vector[i].nodo, h.vector[i].key)
-
 
 

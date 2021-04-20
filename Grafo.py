@@ -12,23 +12,6 @@ class Grafo:
         self.lista_adiacenza_nodi = {} #dizionario key: nodo (str), value: lista nodi adiacenti (obj nodo)
         self.totPeso = 0
     
-
-    def aggiungiNodo(self, nodo):
-        obj_nodo = Nodo(nodo)
-        self.id2Node[obj_nodo.nodo] = obj_nodo
-        self.n_nodi += 1
-        self.lista_nodi.add(nodo)
-        self.lista_adiacenza.setdefault(nodo, []) #inizializzo il valore del nuovo nodo a lista 
-        self.lista_adiacenza_nodi.setdefault(nodo, [])
-    
-    def aggiungiNodi(self, nodi):
-        for nodo in nodi:
-            obj_nodo = Nodo(nodo)
-            self.id2Node[obj_nodo.nodo] = obj_nodo
-            self.n_nodi += 1
-            self.lista_nodi.add(nodo)
-            self.lista_adiacenza.setdefault(nodo, []) #inizializzo il valore del nuovo nodo a lista 
-            self.lista_adiacenza_nodi.setdefault(nodo, [])
        
     
     def aggiungiArco(self, arco):
@@ -44,7 +27,7 @@ class Grafo:
         self.lista_adiacenza_nodi[arco.nodo1].append(self.getNodo(arco.nodo2)) #agginugno il nodo2 alla lista dei vicini del nuovo nodo
 
     
-    #restituisce l'oggetto noto, dato l'id 
+    #restituisce l'oggetto nodo, dato l'id 
     def getNodo(self, id_nodo):
         return self.id2Node[id_nodo]
 
@@ -61,7 +44,6 @@ class Grafo:
         for nodo in self.getListaNodi():
             lista_adiacenza_nodi_padri.setdefault(nodo.nodo, [])
         for nodo in self.id2Node.values():
-            #print(nodo.padre + " è padre di " + nodo.nodo)
             if nodo.nodo != nodo.padre:
                 numero_archi += 1
                 lista_adiacenza_nodi_padri[nodo.nodo].append(self.getNodo(nodo.padre))
