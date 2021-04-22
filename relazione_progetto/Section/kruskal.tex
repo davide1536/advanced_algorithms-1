@@ -1,35 +1,39 @@
 \section{Algoritmo di Kruskal -- Union-Find}
 \label{Algoritmo_di_Kruskal_Union-Find}
 
-L'algoritmo di Kruskal, utilizzando la struttura dati \textit{Union-Find}, permette di costruire un MST aggiungendo ad ogni iterazione un nuovo arco di costo minimo all'insieme grafo, se i vertici di questo non ne fanno già parte. \\
-La struttura dati \textit{Union-Find} gestisce insiemi disgiunti di oggetti, ciò significa che un oggetto può stare in uno e uno solo dei sottoinsiemi degli insiemi disgiunti presenti nell'\textit{Union-Find}.
+L'algoritmo di Kruskal permette di costruire, dato un qualsiasi grafo pesato e non diretto, un albero di copertura minimo (MST), aggiungendo ad ogni iterazione un nuovo arco (di peso minimo) all'insieme grafo e controllando, utilizzando la struttura dati \textit{Union-Find}, che esso non crei cicli. \\
+La struttura dati \textit{Union-Find} gestisce insiemi disgiunti di oggetti, ciò significa che un oggetto può stare in uno e uno solo dei sottoinsiemi degli insiemi disgiunti presenti nella \textit{Union-Find}.
 
 \subsection{Strutture dati}
 \label{strutture_dati}
 
-Le strutture dati utilizzate per implementare questo algoritmo sono:
+Le strutture dati e i metodi utilizzati per implementare questo algoritmo sono:
 
 \begin{itemize}
     \item classe Grafo;
     \item classe Arco;
     \item metodo inizializzaGrafo(n\_g, g);
     \item metodo MakeSet(nodo);
+    \item metodo MergeSort\_weight(array, p, r);
     \item metodo FindSet(nodo1, nodo2, g);
     \item metodo Union(g, nodo1).
 \end{itemize}
 
-La descrizione si può trovare alla sezione \textsc{1.2 Classi}.
+Per la descrizione delle classi si rimanda alla sezione \hyperlink{subsection.1.2}{1.2 Classi}.
+\newline
+Per la descrizione dei metodi si rimanda alla sezione \textsc{2.4 Utility}
 
 \subsection{Implementazione}
 \label{implementazione}
 
-Questo algoritmo è stato implementato nel seguente modo:
+L'algoritmo è implementato nel seguente modo:
 
 \begin{itemize}
-    \item è stato definito un grafo \texttt{grafo} e inizializzato con gli stessi nodi del grafo \texttt{g} dato in input. Ad ogni iterazione, sono stati aggiunti a \texttt{grafo} gli archi che sarebbero andati a costruire la soluzione finale;
-    \item tutti i nodi del \texttt{grafo} sono stati inizializzati come alberi con un solo nodo;
-    \item utilizzando l'algoritmo di MergeSort è stata ordinata la lista degli archi del grafo in maniera crescente;
-    \item è stata iterata la lista ordinata, e per ogni arco si è controllato, guardando la radice, se gli insiemi dei suoi nodi coincidevano. Se le radici dei nodi erano diverse si giungeva alla conclusione che le due componenti erano distinte e quindi l'arco poteva essere aggiunto al grafo \texttt{grafo}, aggiornando le componenti connesse.
+    \item viene definito un grafo \texttt{grafo} e inizializzato con gli stessi nodi del grafo \texttt{g} dato in input.
+    \item attraverso l'operazione MakeSet viene creato un albero per ogni nodo del grafo;
+    \item utilizzando l'algoritmo di MergeSort\_weight viene ordinata la lista degli archi del grafo in maniera crescente rispetto al peso;
+    \item per ogni arco si controlla, risalendo alla radice (attraverso la funzione FindSet(nodo)), se gli insiemi dei suoi nodi coincidono. Se le radici dei nodi sono diverse si giunge alla conclusione che le due componenti sono distinte e quindi l'arco può essere aggiunto al grafo \texttt{grafo}, in quanto non crea un ciclo. 
+    \item nel caso in cui l'arco venga aggiungo al grafo \texttt{grafo}, si aggiornano gli insiemi attraverso l'operazione di union.
 \end{itemize}
 
 
