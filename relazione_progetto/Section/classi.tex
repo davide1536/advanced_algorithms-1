@@ -16,6 +16,8 @@ L'oggetto \textit{Arco} contiene le infomazioni relative ad un arco:
     \item \textsc{getArcoInverso()}: funzione che, chiamata su un arco \emph{(u,v)} , ne restituisce l'inverso \emph{(v,u)}
 \end{itemize}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \subsection{Grafo}
 \label{Grafo}
 
@@ -50,6 +52,8 @@ L'oggetto \textit{Nodo} contiene le informazioni relative ad un nodo:
     \item \textbf{heapIndex}:Indice utilizzato per tenere traccia della posizione di ogni nodo all'interno dell'heap
 \end{itemize}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \subsection{Utility}
 \label{Utility}
 
@@ -61,12 +65,14 @@ La classe \textit{Utility} contiene le funzioni che ci sono servite per implemen
 
 All'interno di questa classe troviamo tre metodi che sono stati utilizzati per implementare \textsc{Kruskal - Union-Find}, in particolare:
 \begin{itemize}
-    \item \textsc{MakeSet(nodo)}: metodo che prende in input un nodo e lo inizializza come padre di sé stesso;
-    \item \textsc{Union(nodo1, nodo2, g)}: metodo che prende in input due nodi e un grafo e, se questi due nodi fanno parte di due insiemi disguinti diversi, unisce le componenti connesse che li contengono, facendo puntare la radice dell'albero con profondità minima a quella del secondo albero, minimizzando quindi la profondità totale;
-    \item \textsc{FindSet(g, nodo1)}: metodo che ritorna la radice dell'insieme in cui è contenuto il nodo1 passato in input, risalendo di padre in padre fino a trovare un self-loop (ossia un elemento che punta a sé stesso). 
+    \item \hypertarget{makeset}{\textsc{MakeSet(nodo)}}: metodo che prende in input un nodo e lo inizializza come padre di sé stesso;
+    \item \hypertarget{union}{\textsc{Union(nodo1, nodo2, g)}}: metodo che prende in input due nodi e un grafo e, se questi due nodi fanno parte di due insiemi disguinti diversi, unisce le componenti connesse che li contengono, facendo puntare la radice dell'albero con profondità minima a quella del secondo albero, minimizzando quindi la profondità totale;
+    \item \hypertarget{findset}{\textsc{FindSet(g, nodo1)}}: metodo che ritorna la radice dell'insieme in cui è contenuto il nodo1 passato in input, risalendo di padre in padre fino a trovare un self-loop (ossia un elemento che punta a sé stesso). 
 \end{itemize}
 
 \newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Heap}
 \label{Heap}
@@ -79,6 +85,8 @@ L'oggetto \textit{Heap} contiene le funzioni che permettono di realizzare un \te
 \end{itemize}
 
 Per implementare l'algoritmo è stato realizzato un \textit{min-heap}, uno heap caratterizzato da nodi con la chiave minore o uguale a quella dei figli. Quindi la radice rappresenta l'elemento più piccolo del \textit{min-heap}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 L'oggetto \textit{Nodo} contiene:
 
@@ -99,6 +107,8 @@ L'oggetto \textit{Nodo} contiene:
 
 
 \newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Main}
 \label{Main}
