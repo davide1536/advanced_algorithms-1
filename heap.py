@@ -86,7 +86,7 @@ def HeapExtractMin(h):
     minimum.in_h = 0
     return minimum
 
-def isIn(h, v):
+def isIn(v):
     if v.in_h == 1:
         return 1
     return 0
