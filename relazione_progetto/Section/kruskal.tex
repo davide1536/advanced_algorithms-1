@@ -12,16 +12,16 @@ Le strutture dati e i metodi utilizzati per implementare questo algoritmo sono:
 \begin{itemize}
     \item classe Grafo;
     \item classe Arco;
-    \item metodo inizializzaGrafo(n\_g, g);
+    \item metodo \hyperlink{inizializzagrafo}{inizializzaGrafo(n\_g, g)};
     \item metodo \hyperlink{makeset}{MakeSet(nodo)};
-    \item metodo MergeSort\_weight(array, p, r);
-    \item metodo \hyperlink{findset}FindSet(nodo1, nodo2, g);
-    \item metodo \hyperlink{union}Union(g, nodo1).
+    \item metodo \hyperlink{mergesort}{MergeSort\_weight(array, p, r)};
+    \item metodo \hyperlink{findset}{FindSet(nodo1, nodo2, g)};
+    \item metodo \hyperlink{union}{Union(g, nodo1)}.
 \end{itemize}
 
 Per la descrizione delle classi si rimanda alla sezione \hyperlink{section.2}{1.2 Classi}.
 \newline
-Per la descrizione dei metodi si rimanda alla sezione \hyperlink{subsection.2.4}{2.4 Utility}
+
 
 \subsection{Implementazione}
 \label{implementazione}
@@ -33,7 +33,7 @@ L'algoritmo è implementato nel seguente modo:
     \item attraverso l'operazione MakeSet viene creato un albero per ogni nodo del grafo;
     \item utilizzando l'algoritmo di MergeSort\_weight viene ordinata la lista degli archi del grafo in maniera crescente rispetto al peso;
     \item per ogni arco si controlla, risalendo alla radice (attraverso la funzione FindSet(nodo)), se gli insiemi dei suoi nodi coincidono. Se le radici dei nodi sono diverse si giunge alla conclusione che le due componenti sono distinte e quindi l'arco può essere aggiunto al grafo \texttt{grafo}, in quanto non crea un ciclo. 
-    \item nel caso in cui l'arco venga aggiungo al grafo \texttt{grafo}, si aggiornano gli insiemi attraverso l'operazione di union.
+    \item nel caso in cui l'arco venga aggiunto al grafo \texttt{grafo}, si aggiornano gli insiemi attraverso l'operazione di Union.
 \end{itemize}
 
 

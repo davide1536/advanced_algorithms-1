@@ -1,0 +1,10 @@
+\section{Performance}
+Abbiamo misurato le performance dei tre algoritmi utilizzando 68 grafi di diverse dimensioni.
+I grafi testati hanno un numero di nodi che variavano dai  10 ai 100000.
+Come già detto, per ogni dimensione sono presenti quattro grafi, per ottenere una misurazione più precisa in fase di misurazione, specialmente per i grafi con una dimensionalità minore.
+\subsection{Prim}
+L'algoritmo di Prim ha una complessità teoria di $O(mlogn)$, perciò ci aspettiamo indicativamente lo stesso risultato anche nella sua applicazione.
+\subsection{Kruskal naive}
+Per quanto riguarda la versione non ottimizzata dell'algoritmo di Kruskal, cioè quella che ad ogni iterazione del ciclo esegue una ricerca in profondità per assicurarsi che il nuovo arco non vada a creare cicli, ha una complessità di $O(mn)$.
+\subsection{Kruskal}
+Anche per kruskal, come Prim, ha una complessità di $O(mlogn)$

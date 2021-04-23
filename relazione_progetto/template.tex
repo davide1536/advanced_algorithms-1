@@ -23,23 +23,28 @@
 \usepackage{comment}
 \usepackage{lipsum}
 \usepackage{hyperref}
+\usepackage{graphicx}
 
 
 \hypersetup{
-    colorlinks=false
+    colorlinks = true,
+    linkcolor = red
     }
 
 \pgfplotsset{compat=1.16}
 
 %%% Il documento vero e proprio %%%
 \begin{document}
-
+\begin{figure}[]
+\centerline{\includegraphics[scale = 0.5]{Fig/logo_unipd}}
+\label{fig}
+\end{figure}
 %%% Frontespizio %%%
 \begin{frontespizio}
 \Universita{Padova} 
-\Logo{Fig/logo_unipd} 
+
 \Dipartimento{Matematica}
-\Corso[Laurea Magistrale]{Informatica} 
+\Corso[Laurea Magistrale]{Informatica}
 
 \Annoaccademico{2020-2021}
 \Titoletto{Algoritmi Avanzati \\ Relazione di laboratorio 1}
@@ -65,6 +70,10 @@
 \input{Section/kruskal_naive.tex}
 \newpage
 \input{Section/kruskal.tex}
+\newpage
+\input{Section/performance}
+\newpage
+\input{Section/correttezza.tex}
 %\newpage
 %\input{Section/risultati.tex}
 %\newpage

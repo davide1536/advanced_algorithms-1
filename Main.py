@@ -257,7 +257,7 @@ def prim(g, radice):
         g.totPeso += u.key
         for arco in g.lista_adiacenza[u.nodo]:      #per ogni arco, in lista di adiacenza di u
             nodo_adj = g.getNodo(arco.nodo2)        #g.getNodo(arco.nodo2) = (oggetto) nodo adiacente a u
-            if isIn(nodo_adj) == 1 and arco.peso < nodo_adj.key:
+            if isIn(q,nodo_adj) == 1 and arco.peso < nodo_adj.key:
                 nodo_adj.padre = u.nodo
                 index = nodo_adj.heapIndex  #ottengo la sua posizione all'interno dell'heap
                 HeapDecreaseKey(q, index, arco.peso)

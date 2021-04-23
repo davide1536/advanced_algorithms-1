@@ -1,7 +1,7 @@
-\section{Algoritmo di Kruskal -- naive}
+\section{Algoritmo di Kruskal -- Naive}
 \label{Algoritmo_di_Kruskal-naive}
 
-L'algoritmo Kruskal naive costruisce, a partire da un grafo dato in input, un MST, aggiungendo ad ogni iterazione un nuovo arco di costo minimo, se ciò non comporta il verificarsi di un ciclo.
+L'algoritmo Kruskal--Naive è una prima implementazione dell'algoritmo di Kruskal per l'individuazione di un albero di copertura minimio. Come si vedrà in seguito, è possibile migliorare notevolmente questo algoritmo grazie all'utilizzo di una particolare struttura dati per l'individuazione di cicli nel grafo. L'idea alla base di questa implementazione consiste nel costruire il MST aggiungendo, ad ogni iterazione, l'arco con peso minimo e controllando che esso non porti alla formazione di cicli nel grafo. 
 
 \subsection{Strutture dati}
 \label{strutture_dati}
@@ -11,12 +11,37 @@ Le strutture dati utilizzate per implementare questo algoritmo sono:
 \begin{itemize}
     \item classe Grafo;
     \item classe Arco;
+    \item metodo \hyperlink{inizializzagrafo}{inizializzaGrafo(n\_g, g)};
+    \item metodo \hyperlink{mergesort}{mergeSort\_weight(array, p, r)};
+    \item metodo \hyperlink{dfsciclo}{dfs\_ciclo(g, u, padri, visitati)}.
 \end{itemize}
+
+Per la descrizione delle classi si rimanda alla sezione \hyperlink{section.2}{1.2 Classi}.
+\newline
 
 \subsection{Implementazione}
 \label{implementazione}
 
-Questo algoritmo è stato implementato nel seguente modo:
+L'algoritmo è stato implementato nel seguente modo:
+\begin{itemize}
+    
+    \item vengono creati due oggetti grafo, uno sarà il grafo MST e l'altro un grafo fittizio utile per verificare la presenza di cicli in tempi ridotti;
+    
+    \item viene eseguito il mergeSort per ordinare gli archi rispetto al peso;
+    
+    \item vengono inizializzati i due grafi con tutti i nodi del grafo in input (è chiaro, infatti, che i nodi devono essere gli stessi del grafo in input ed aggiungerli ad ogni passo sarebbe solo una superflua complicazione)
+    
+    \item si scorre quindi la lista di archi ordinati e, ad ogni iterazione, viene aggiornata la lista di adiacenza del grafo fittizio con l'aggiunta dell'arco selezionato (si noti che la lista di adiacenza è l'unico parametro del grafo di cui si ha bisogno per eseguire la \hyperlink{dfsciclo}{dfs\_ciclo()}, o una qualsiasi dfs)
+    
+    \item a questo punto, con la lista di adiacenza aggiornata vengono inizializzati a 0 il vettore dei visitati e dei padri in quanto ad ogni esecuzione della \hyperlink{dfsciclo}{dfs\_ciclo()} è necessario che questi siano indipendenti dalla visita precedente, altrimenti avremmo nodi già visitati e cicli inesistenti;
+    
+    \item se non viene trovato alcun ciclo si procede con l'aggiunta dell'arco e delle rispettive dipendenze (numero archi, lista di adiacenza , ecc..) al grafo MST;
+    
+    \item se, invece, viene trovato un ciclo, si esegue un pop() dalla lista di adiacenza del grafo fittizio (è possibile eseguire questa operazione, di costo O(1), poiché l'unica aggiunta che era stata fatta sul grafo fittizio consisteva di un append() sulla lista di adiacenza)
+    
+    \item per velocizzare ulteriormente i tempi, si è pensato inoltre di non eseguire l'algoritmo per ogni arco del grafo, bensì di fermarsi una volta raggiunti (dato n il numero dei nodi) gli n-1 archi.
+    
+\end{itemize}
 
 \subsection{Complessità}
 \label{complessità}
