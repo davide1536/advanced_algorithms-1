@@ -2,7 +2,7 @@ from Grafo import Grafo
 from Nodo import Nodo
 from Arco import Arco
 from heap import heap, HeapDecreaseKey, HeapExtractMin, HeapMinimum, BuildMinHeap, isIn
-from Utility import merge, mergeSort_weight, inizializzaGrafo, dfs_ciclo, findSet, union, makeSet, test_albero_supporto
+from Utility import merge, mergeSort_weight, inizializzaGrafo, dfs_ciclo, findSet, union, makeSet, test_albero_supporto, test_total
 import random
 import os
 import math
@@ -129,8 +129,10 @@ def measure_run_time(n_instances, graphs, algorithm):
             nodo_casuale = next(iter(graphs[i].lista_nodi))    #casuale perchè il set lista_nodi cambia ordine ad ogni parsing
 
             start_time = perf_counter_ns()
-            for j in range(iterations):
-                g = prim(graphs[i],graphs[i].getNodo(nodo_casuale))
+            m = 0
+            while m < iterations:
+                prim(graphs[i],graphs[i].getNodo(nodo_casuale))
+                m+=1
             end_time = perf_counter_ns()
             p_g.append(prim(graphs[i],graphs[i].getNodo(nodo_casuale)).getGrafoPrim())
             gc.enable()
@@ -138,16 +140,20 @@ def measure_run_time(n_instances, graphs, algorithm):
         if algorithm == "NaiveKruskal":
             gc.disable()
             start_time = perf_counter_ns()
-            for j in range(iterations):
+            j = 0
+            while j < iterations:
                 kn_g.append(naiveKruskal(graphs[i]))
+                j+=1
             end_time = perf_counter_ns()
             gc.enable()
 
         if algorithm == "Kruskal":
             gc.disable()
             start_time = perf_counter_ns()
-            for j in range(iterations):
+            k = 0
+            while k < iterations:
                 k_g.append(kruskal(graphs[i]))
+                k += 1
             end_time = perf_counter_ns()
             gc.enable()
 
@@ -326,7 +332,6 @@ def kruskal(g):
 
 parsing(directory)
 plot_graph()
-test_albero_supporto(k_g)
-test_albero_supporto(p_g)
+test_total(p_g, kn_g, k_g)
 
 

@@ -1,6 +1,7 @@
 #classe utile per la Union-Find e mergeSort
 #capitolo 21.3/4 del libro
 import copy
+import random
 from Nodo import Nodo
 from Grafo import Grafo
 
@@ -126,7 +127,7 @@ def findSet(g, nodo1):
 ################################## Funzioni di Test ##################################
 
 # controllo se l'mst risultante è un albero di supporto
-# grafo connesso con il minor numero di nodi
+# conto i nodi che visito
 # n_nodi = numero di nodi visitati
 def dfs_supporto(g, u, n_nodi, visitati):
     visitati[int(u.nodo)] = 1
@@ -135,15 +136,57 @@ def dfs_supporto(g, u, n_nodi, visitati):
         if visitati[int(v.nodo)] == 0:
             dfs_supporto(g, v, n_nodi, visitati)
 
+
+# controllo se l'mst risultante è un albero di supporto
 # input lista_grafi per ogni algoritmo
 # controllo se tutti i nodi sono stati visitati
 # se il numero di archi è il minimo : dati n nodi --> n-1 archi
 def test_albero_supporto(lista_grafi):
+    res = True
     for grafo in lista_grafi:
         visitati = [0]*(grafo.n_nodi + 1)
         n_nodi = []
         dfs_supporto(grafo, grafo.getNodo("6"), n_nodi, visitati)
-        print(grafo.n_nodi == len(n_nodi) and (grafo.n_archi + 1) == len(n_nodi))
+        print("-"*20)
+        print()
+        print("Numero di nodi nel grafo: ", grafo.n_nodi)
+        print("Numero di nodi visitati con dfs: ", len(n_nodi)) 
+        print("Numero di archi nel grafo: ", grafo.n_archi)
+        print("É un albero di supporto?: ", grafo.n_nodi == len(n_nodi) and (grafo.n_archi + 1) == len(n_nodi) )
+        print()
+        if not(grafo.n_nodi == len(n_nodi) and (grafo.n_archi + 1) == len(n_nodi)):
+            res = False
+    return res
+
+
+def test_total(prim, kruskal_naive, kruskal):
+
+    rand = random.randint(0,1)
+    if rand == 0: 
+        easter_egg = True
+    else:
+        easter_egg = False
+    
+    res = test_albero_supporto(prim) or test_albero_supporto(kruskal_naive) or test_albero_supporto(kruskal)
+    
+    print("-"*20)
+
+    if res and not easter_egg:
+        print ("TUTTI GLI ALBERI SONO ALBERI DI SUPPORTO")
+    
+    elif res and easter_egg:
+        print("Autodistruzione in:")
+        print("3...")
+        print("2...")
+        print("1...")
+        print("...")
+        print("scherzo... è tutto giusto")
+
+    else:
+        print("ERRORE "*300000000)
+
+    
+
 
 
 
