@@ -2,7 +2,7 @@ from Grafo import Grafo
 from Nodo import Nodo
 from Arco import Arco
 from heap import heap, HeapDecreaseKey, HeapExtractMin, HeapMinimum, BuildMinHeap, isIn
-from Utility import merge, mergeSort_weight, inizializzaGrafo, dfs_ciclo, findSet, union, makeSet, test_albero_supporto, test_total, test_times
+from Utility import merge, mergeSort_weight, inizializzaGrafo, dfs_ciclo, findSet, union, makeSet, test_albero_supporto, test_total, test_times, output_peso
 import random
 import os
 import math
@@ -247,6 +247,23 @@ def plot_graph():
         plt.xlabel('size')
         plt.show()
 
+    plt.plot(graphs_groupped.keys(), times[0], label = 'Prim')
+    plt.plot(graphs_groupped.keys(), times[1],label = 'Kruskal')
+    plt.plot(graphs_groupped.keys(), times[2], label = 'Kruskal naive')
+    plt.legend()
+    plt.title("grafici in relazione")
+    plt.ylabel('run time(ns)')
+    plt.xlabel('size')
+    plt.show()
+
+    plt.plot(graphs_groupped.keys(), times[0], label = 'Prim')
+    plt.plot(graphs_groupped.keys(), times[1],label = 'Kruskal')
+    plt.legend()
+    plt.title("grafici in relazione")
+    plt.ylabel('run time(ns)')
+    plt.xlabel('size')
+    plt.show()
+
     return graphs_groupped, times
 
  
@@ -328,11 +345,13 @@ def kruskal(g):
     mergeSort_weight(g.lista_archi, 0, len(g.lista_archi)-1)
     
     for arco in g.lista_archi:
-        
-        if findSet(grafo, grafo.getNodo(arco.nodo1)) != findSet(grafo, grafo.getNodo(arco.nodo2)):
-            grafo.totPeso += arco.peso
-            grafo.aggiungiArco(arco)
-            union(grafo.getNodo(arco.nodo1), grafo.getNodo(arco.nodo2), grafo)
+        if grafo.n_archi != g.n_nodi - 1:
+            if findSet(grafo, grafo.getNodo(arco.nodo1)) != findSet(grafo, grafo.getNodo(arco.nodo2)):
+                grafo.totPeso += arco.peso
+                grafo.aggiungiArco(arco)
+                union(grafo.getNodo(arco.nodo1), grafo.getNodo(arco.nodo2), grafo)
+        else:
+            return grafo
     
     return grafo
 
@@ -341,14 +360,20 @@ def kruskal(g):
 ######################## MAIN ########################
 
 parsing(directory)
+
+lista_grafi = sorted(lista_grafi, key=lambda grafo: (grafo.n_nodi, grafo.n_archi))
+print(len(lista_grafi))
 graphs_groupped,times = plot_graph()
 
-for grafi in k_g:
-    print("peso: ",grafi.totPeso)
 
-test_total(p_g, kn_g, k_g)
 
-test_times(times, graphs_groupped)
+#test_total(p_g, kn_g, k_g)
+
+output_peso(p_g, k_g, kn_g, lista_grafi)
+
+#test_times(times, graphs_groupped)
+
+
 
 
 

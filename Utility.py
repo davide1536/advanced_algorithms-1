@@ -168,7 +168,11 @@ def test_total(prim, kruskal_naive, kruskal):
     else:
         easter_egg = False
     
-    res = test_albero_supporto(prim) or test_albero_supporto(kruskal_naive) or test_albero_supporto(kruskal)
+    res_p = test_albero_supporto(prim) 
+    res_kn =  test_albero_supporto(kruskal_naive) 
+    res_k = test_albero_supporto(kruskal)
+
+    res = res_p or res_k or res_kn
     
     print("-"*20)
 
@@ -187,9 +191,8 @@ def test_total(prim, kruskal_naive, kruskal):
         print("ERRORE "*300000000)
 
 
+#funzione per stabilire l'algoritmo più veloce per ogni classe di grafo
 def test_times(times, graphs):
-    #i = 0
-    #timesNamed = {}
     algorithms = ["prim", "Kruskal", "NaiveKruskal"]
     times.append(algorithms)
     print(times)
@@ -199,7 +202,7 @@ def test_times(times, graphs):
         kruskal = times[1][i]
         kruskal_n = times[2][i]
         minmin = min(prim, kruskal, kruskal_n)
-        if minmin == prim: 
+        if minmin == prim:
             print("per istanze di dimensionalità: ", list(graphs.keys())[i], "mediamente il più veloce è prim")
         
         elif minmin == kruskal: 
@@ -207,15 +210,35 @@ def test_times(times, graphs):
 
         else: 
             print("per istanze di dimensionalità: ", list(graphs.keys())[i], "mediamente il più veloce è kruskal-naive")
-        #times.sort(key = lambda row: row[i:], reverse = True)
-        #print(times[0][-1])
-        print(minmin)
-
-        #i = i+1
 
 
+#funzione che restiuisce il peso del grafo per ogni grafo, in base ai diversi algoritmi
+def output_peso(prim, kruskal, kruskal_naive, lista_grafi_originale):
+    #tabella [numero nodi] [numero archi] [peso_prim] [peso_kruskal] [peso_kruskal_naive]
+
+    print()
+    print("n_nodi originali", "n_archi originali", "peso_prim", '', "peso_kruskal",'', "peso_kruskal_naive", sep="\t")
+    print("-"*120)
+    table = [[],[],[],[],[]]
+    table[0] = [grafo.n_nodi for grafo in lista_grafi_originale]
+    table[1] = [grafo.n_archi for grafo in lista_grafi_originale]
+    table[2] = [grafo.totPeso for grafo in prim]
+    table[3] = [grafo.totPeso for grafo in kruskal]
+    table[4] = [grafo.totPeso for grafo in kruskal_naive]
+
+    #schema tabella
+    #print(table[0][0], "|", table[1][0], "|", table[2][0], "|", table[3][0], "|", table[4][0])
+    #print("-"*30)
+    #valori tabella
+    for i in range(len(lista_grafi_originale)):
+        if i < 27:
+            print(table[0][i], '', '', table[1][i], '', '', table[2][i], '', '', table[3][i], '', '', table[4][i], sep="\t")
+        else:
+            print(table[0][i], '', '', table[1][i], '', '', table[2][i], '', table[3][i], '', table[4][i], sep="\t")    
+        
 
 
+ 
     
 
 
