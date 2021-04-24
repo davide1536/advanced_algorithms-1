@@ -2,7 +2,7 @@ from Grafo import Grafo
 from Nodo import Nodo
 from Arco import Arco
 from heap import heap, HeapDecreaseKey, HeapExtractMin, HeapMinimum, BuildMinHeap, isIn
-from Utility import merge, mergeSort_weight, inizializzaGrafo, dfs_ciclo, findSet, union, makeSet, test_albero_supporto, test_total
+from Utility import merge, mergeSort_weight, inizializzaGrafo, dfs_ciclo, findSet, union, makeSet, test_albero_supporto, test_total, test_times
 import random
 import os
 import math
@@ -14,6 +14,7 @@ from collections import defaultdict
 import collections
 import matplotlib.pyplot as plt
 import copy
+import time
 
 #lista di grafi prim
 p_g = []
@@ -32,7 +33,7 @@ lista_grafi = []
 
 def parsing(directory):
     for file in os.listdir(directory):
-        if not (file.endswith("100000.txt") or file.endswith("80000.txt") or file.endswith("40000.txt") or file.endswith("20000.txt")):
+        #if not (file.endswith("100000.txt") or file.endswith("80000.txt") or file.endswith("40000.txt") or file.endswith("20000.txt")):
             crea_grafi(file)
 
 
@@ -142,9 +143,10 @@ def measure_run_time(n_instances, graphs, algorithm):
             start_time = perf_counter_ns()
             j = 0
             while j < iterations:
-                kn_g.append(naiveKruskal(graphs[i]))
+                naiveKruskal(graphs[i])
                 j+=1
             end_time = perf_counter_ns()
+            kn_g.append(naiveKruskal(graphs[i]))
             gc.enable()
 
         if algorithm == "Kruskal":
@@ -152,9 +154,10 @@ def measure_run_time(n_instances, graphs, algorithm):
             start_time = perf_counter_ns()
             k = 0
             while k < iterations:
-                k_g.append(kruskal(graphs[i]))
+                kruskal(graphs[i])     
                 k += 1
             end_time = perf_counter_ns()
+            k_g.append(kruskal(graphs[i]))
             gc.enable()
 
         sum_times += (end_time - start_time)/iterations
@@ -172,7 +175,7 @@ def measurePerformance():
     for i in range (len(lista_grafi)):
         graphs_groupped[int(lista_grafi[i].n_nodi)].append(lista_grafi[i])
 
-    #ordino il dizionario in base alla key (numero di nodi)
+    #  ghhhh il dizionario in base alla key (numero di nodi)
     graphs_groupped = collections.OrderedDict(sorted(graphs_groupped.items()))
     
 
@@ -244,14 +247,17 @@ def plot_graph():
         plt.xlabel('size')
         plt.show()
 
+    return graphs_groupped, times
 
  
 
 def prim(g, radice):
+    g.totPeso = 0
     radice.padre = radice.nodo
     lista_nodi_obj = g.getListaNodi()
     index = 0
     for nodo in lista_nodi_obj:
+        nodo.in_h = 1
         nodo.key = float('inf')  #float('inf') indica un valore superiore a qualsiasi altro valore
         nodo.heapIndex = index  #per non usare la funzione 'index' 
         index = index + 1
@@ -260,6 +266,8 @@ def prim(g, radice):
     BuildMinHeap(q)
     while q.heapsize != 0:
         u = HeapExtractMin(q)
+        if u.key == float('inf'):
+            exit()
         g.totPeso += u.key
         for arco in g.lista_adiacenza[u.nodo]:      #per ogni arco, in lista di adiacenza di u
             nodo_adj = g.getNodo(arco.nodo2)        #g.getNodo(arco.nodo2) = (oggetto) nodo adiacente a u
@@ -277,6 +285,7 @@ def prim(g, radice):
 # dal nodo (o da uno dei nodi) dell'arco aggiunto, questa compirà una visita completa del sottografo connesso
 # il quale è appunto l'unico che al passo n+1 potrebbe contenere un ciclo.
 def naiveKruskal(g):
+    g.totPeso = 0
     grafo_mst = Grafo()
     prova_mst = Grafo()
 
@@ -308,6 +317,7 @@ def naiveKruskal(g):
 
 
 def kruskal(g):
+    g.totPeso = 0
     grafo = Grafo()
 
     inizializzaGrafo(grafo, g)
@@ -331,7 +341,13 @@ def kruskal(g):
 ######################## MAIN ########################
 
 parsing(directory)
-plot_graph()
+graphs_groupped,times = plot_graph()
+
+for grafi in k_g:
+    print("peso: ",grafi.totPeso)
+
 test_total(p_g, kn_g, k_g)
+#test_times(times, graphs_groupped)
+
 
 

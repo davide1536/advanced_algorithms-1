@@ -153,6 +153,7 @@ def test_albero_supporto(lista_grafi):
         print("Numero di nodi visitati con dfs: ", len(n_nodi)) 
         print("Numero di archi nel grafo: ", grafo.n_archi)
         print("É un albero di supporto?: ", grafo.n_nodi == len(n_nodi) and (grafo.n_archi + 1) == len(n_nodi) )
+        print("Peso totale dell'albero: ", grafo.totPeso)
         print()
         if not(grafo.n_nodi == len(n_nodi) and (grafo.n_archi + 1) == len(n_nodi)):
             res = False
@@ -184,6 +185,21 @@ def test_total(prim, kruskal_naive, kruskal):
 
     else:
         print("ERRORE "*300000000)
+
+def test_times(times, graphs):
+    i = 0
+    timesNamed = {}
+    algorithms = ["prim", "Kruskal", "NaiveKruskal"]
+    times.append(algorithms)
+    for key in graphs.keys():
+        print("per istanze di dimensionalità: ", key, "mediamente il più veloce è")
+        times.sort(key = lambda row: row[i:], reverse = True)
+        print(times[0][-1])
+
+        i = i+1
+
+
+
 
     
 
