@@ -186,17 +186,32 @@ def test_total(prim, kruskal_naive, kruskal):
     else:
         print("ERRORE "*300000000)
 
+
 def test_times(times, graphs):
-    i = 0
-    timesNamed = {}
+    #i = 0
+    #timesNamed = {}
     algorithms = ["prim", "Kruskal", "NaiveKruskal"]
     times.append(algorithms)
-    for key in graphs.keys():
-        print("per istanze di dimensionalità: ", key, "mediamente il più veloce è")
-        times.sort(key = lambda row: row[i:], reverse = True)
-        print(times[0][-1])
+    print(times)
+    for i in range(len(graphs.keys())-1):
 
-        i = i+1
+        prim = times[0][i]
+        kruskal = times[1][i]
+        kruskal_n = times[2][i]
+        minmin = min(prim, kruskal, kruskal_n)
+        if minmin == prim: 
+            print("per istanze di dimensionalità: ", list(graphs.keys())[i], "mediamente il più veloce è prim")
+        
+        elif minmin == kruskal: 
+            print("per istanze di dimensionalità: ", list(graphs.keys())[i], "mediamente il più veloce è kruskal")
+
+        else: 
+            print("per istanze di dimensionalità: ", list(graphs.keys())[i], "mediamente il più veloce è kruskal-naive")
+        #times.sort(key = lambda row: row[i:], reverse = True)
+        #print(times[0][-1])
+        print(minmin)
+
+        #i = i+1
 
 
 

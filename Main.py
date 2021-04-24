@@ -23,8 +23,8 @@ k_g = []
 #lista grafi kruskal naive
 kn_g = []
 
-#per_m = "algoritmi-avanzati-laboratorio/"
-per_m = ""
+per_m = "algoritmi-avanzati-laboratorio/"
+#per_m = ""
 #togliere per_m
 directory = per_m+"mst_dataset/"
 lista_grafi = []
@@ -33,7 +33,7 @@ lista_grafi = []
 
 def parsing(directory):
     for file in os.listdir(directory):
-        #if not (file.endswith("100000.txt") or file.endswith("80000.txt") or file.endswith("40000.txt") or file.endswith("20000.txt")):
+        if not (file.endswith("100000.txt") or file.endswith("80000.txt") or file.endswith("40000.txt") or file.endswith("20000.txt") or file.endswith("10000.txt") or file.endswith("8000.txt") or file.endswith("4000.txt")):
             crea_grafi(file)
 
 
@@ -347,7 +347,8 @@ for grafi in k_g:
     print("peso: ",grafi.totPeso)
 
 test_total(p_g, kn_g, k_g)
-#test_times(times, graphs_groupped)
+
+test_times(times, graphs_groupped)
 
 
 
