@@ -23,17 +23,22 @@ k_g = []
 #lista grafi kruskal naive
 kn_g = []
 
-per_m = "algoritmi-avanzati-laboratorio/"
-#per_m = ""
+p_t = [] 
+k_t = []
+kn_t = []
+
+#per_m = "algoritmi-avanzati-laboratorio/"
+per_m = ""
 #togliere per_m
 directory = per_m+"mst_dataset/"
 lista_grafi = []
+singleTimes = []
 
 
 
 def parsing(directory):
     for file in os.listdir(directory):
-        if not (file.endswith("100000.txt") or file.endswith("80000.txt") or file.endswith("40000.txt") or file.endswith("20000.txt") or file.endswith("10000.txt") or file.endswith("8000.txt") or file.endswith("4000.txt")):
+        if not (file.endswith("100000.txt") or file.endswith("80000.txt") or file.endswith("40000.txt") or file.endswith("20000.txt")):
             crea_grafi(file)
 
 
@@ -122,6 +127,12 @@ def measure_run_time(n_instances, graphs, algorithm):
     #liste per confrontare gli algoritmi
     global p_g
     global k_g
+    global kn_g
+    global p_t 
+    global k_t 
+    global kn_t
+
+
     print("testing graph size: ", graphs[0].n_nodi)
     for i in range(n_instances):
         print("istanza numbero: ",i)
@@ -136,6 +147,7 @@ def measure_run_time(n_instances, graphs, algorithm):
                 m+=1
             end_time = perf_counter_ns()
             p_g.append(prim(graphs[i],graphs[i].getNodo(nodo_casuale)).getGrafoPrim())
+            p_t.append(round((end_time - start_time)/iterations//1000, 3))
             gc.enable()
 
         if algorithm == "NaiveKruskal":
@@ -147,6 +159,7 @@ def measure_run_time(n_instances, graphs, algorithm):
                 j+=1
             end_time = perf_counter_ns()
             kn_g.append(naiveKruskal(graphs[i]))
+            kn_t.append(round((end_time - start_time)/iterations//1000, 3))
             gc.enable()
 
         if algorithm == "Kruskal":
@@ -158,9 +171,11 @@ def measure_run_time(n_instances, graphs, algorithm):
                 k += 1
             end_time = perf_counter_ns()
             k_g.append(kruskal(graphs[i]))
+            k_t.append(round((end_time - start_time)/iterations//1000, 3))
             gc.enable()
 
         sum_times += (end_time - start_time)/iterations
+
 
     avg_time = round((sum_times / n_instances)//1000, 3) #millisecondi
 
@@ -369,7 +384,7 @@ graphs_groupped,times = plot_graph()
 
 #test_total(p_g, kn_g, k_g)
 
-output_peso(p_g, k_g, kn_g, lista_grafi)
+output_peso(p_g, k_g, kn_g, lista_grafi, p_t, k_t, kn_t)
 
 #test_times(times, graphs_groupped)
 

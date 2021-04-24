@@ -213,18 +213,21 @@ def test_times(times, graphs):
 
 
 #funzione che restiuisce il peso del grafo per ogni grafo, in base ai diversi algoritmi
-def output_peso(prim, kruskal, kruskal_naive, lista_grafi_originale):
+def output_peso(prim, kruskal, kruskal_naive, lista_grafi_originale, p_t, k_t, kn_t):
     #tabella [numero nodi] [numero archi] [peso_prim] [peso_kruskal] [peso_kruskal_naive]
 
     print()
-    print("n_nodi originali", "n_archi originali", "peso_prim", '', "peso_kruskal",'', "peso_kruskal_naive", sep="\t")
+    print("n_nodi originali", "n_archi originali", "peso_prim", '', "peso_kruskal",'', "peso_kruskal_naive","Tempo Prim", "Tempo Kruskal", "Tempo Kruskal naive" ,sep="\t")
     print("-"*120)
-    table = [[],[],[],[],[]]
+    table = [[],[],[],[],[], [],[],[]]
     table[0] = [grafo.n_nodi for grafo in lista_grafi_originale]
     table[1] = [grafo.n_archi for grafo in lista_grafi_originale]
     table[2] = [grafo.totPeso for grafo in prim]
     table[3] = [grafo.totPeso for grafo in kruskal]
     table[4] = [grafo.totPeso for grafo in kruskal_naive]
+    table[5] = [tempo for tempo in p_t]
+    table[6] = [tempo for tempo in k_t]
+    table[7] = [tempo for tempo in kn_t]
 
     #schema tabella
     #print(table[0][0], "|", table[1][0], "|", table[2][0], "|", table[3][0], "|", table[4][0])
@@ -232,9 +235,9 @@ def output_peso(prim, kruskal, kruskal_naive, lista_grafi_originale):
     #valori tabella
     for i in range(len(lista_grafi_originale)):
         if i < 27:
-            print(table[0][i], '', '', table[1][i], '', '', table[2][i], '', '', table[3][i], '', '', table[4][i], sep="\t")
+            print(table[0][i], '', '', table[1][i], '', '', table[2][i], '', '', table[3][i], '', '', table[4][i],'', '', table[5][i],'' ,'', table[6][i],'','', table[7][i], sep="\t")
         else:
-            print(table[0][i], '', '', table[1][i], '', '', table[2][i], '', table[3][i], '', table[4][i], sep="\t")    
+            print(table[0][i], '', '', table[1][i], '', '', table[2][i], '', table[3][i], '', table[4][i], '', table[5][i],'', table[6][i],'', table[7][i],sep="\t")    
         
 
 
