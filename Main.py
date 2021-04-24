@@ -38,7 +38,7 @@ singleTimes = []
 
 def parsing(directory):
     for file in os.listdir(directory):
-        if not (file.endswith("100000.txt") or file.endswith("80000.txt") or file.endswith("40000.txt") or file.endswith("20000.txt")):
+        if not (file.endswith("100000.txt") or file.endswith("80000.txt") or file.endswith("40000.txt") or file.endswith("20000.txt") or file.endswith("10000.txt") or file.endswith("8000.txt") ):
             crea_grafi(file)
 
 

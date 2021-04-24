@@ -4,6 +4,7 @@ import copy
 import random
 from Nodo import Nodo
 from Grafo import Grafo
+from tabulate import tabulate
 
 
 ################################## Merge + MergeSort ##################################
@@ -212,34 +213,51 @@ def test_times(times, graphs):
             print("per istanze di dimensionalità: ", list(graphs.keys())[i], "mediamente il più veloce è kruskal-naive")
 
 
-#funzione che restiuisce il peso del grafo per ogni grafo, in base ai diversi algoritmi
+#funzione min per confronti a 3 
+# list = [tempo_prim, tempo_kruskal, tempo_kruskal_naive]
+def min_reload(list):
+    algo = ""
+    min = 0
+    if list[0] < list[1]:
+        min = list[0]
+        algo = "prim"
+    elif list[0] > list[1]:
+        min = list[1]
+        algo = "kruskal"
+    else:
+        min = list[0]
+        algo = "prim == kruskal"
+
+    if min > list[2]:
+        min = list[2]
+        algo = "kruskal_naive"
+    
+    res = algo + " : " + str(min)
+    return res
+    
+
+#funzione di output
 def output_peso(prim, kruskal, kruskal_naive, lista_grafi_originale, p_t, k_t, kn_t):
-    #tabella [numero nodi] [numero archi] [peso_prim] [peso_kruskal] [peso_kruskal_naive]
+    
+    #tabella [numero nodi] [numero archi] [peso_prim] [peso_kruskal] [peso_kruskal_naive] []
+    table = []
+    table.append([grafo.n_nodi for grafo in lista_grafi_originale])     #table[0]
+    table.append([grafo.n_archi for grafo in lista_grafi_originale])    #table[1]
+    table.append([grafo.totPeso for grafo in prim])                     #table[2]
+    table.append([grafo.totPeso for grafo in kruskal])                  #table[3]
+    table.append([grafo.totPeso for grafo in kruskal_naive])            #table[4]
+    table.append([tempo for tempo in p_t])                              #table[5]
+    table.append([tempo for tempo in k_t])                              #table[6]
+    table.append([tempo for tempo in kn_t])                             #table[7]
+
+    #valori tabella
+    
+    tabella = []
+    for i in range(len(lista_grafi_originale)):
+        tabella.append([table[0][i], table[1][i], table[2][i], table[3][i], table[4][i], table[5][i], table[6][i], table[7][i], min_reload([table[5][i], table[6][i], table[7][i]])])
 
     print()
-    print("n_nodi originali", "n_archi originali", "peso_prim", '', "peso_kruskal",'', "peso_kruskal_naive","Tempo Prim", "Tempo Kruskal", "Tempo Kruskal naive" ,sep="\t")
-    print("-"*120)
-    table = [[],[],[],[],[], [],[],[]]
-    table[0] = [grafo.n_nodi for grafo in lista_grafi_originale]
-    table[1] = [grafo.n_archi for grafo in lista_grafi_originale]
-    table[2] = [grafo.totPeso for grafo in prim]
-    table[3] = [grafo.totPeso for grafo in kruskal]
-    table[4] = [grafo.totPeso for grafo in kruskal_naive]
-    table[5] = [tempo for tempo in p_t]
-    table[6] = [tempo for tempo in k_t]
-    table[7] = [tempo for tempo in kn_t]
-
-    #schema tabella
-    #print(table[0][0], "|", table[1][0], "|", table[2][0], "|", table[3][0], "|", table[4][0])
-    #print("-"*30)
-    #valori tabella
-    for i in range(len(lista_grafi_originale)):
-        if i < 27:
-            print(table[0][i], '', '', table[1][i], '', '', table[2][i], '', '', table[3][i], '', '', table[4][i],'', '', table[5][i],'' ,'', table[6][i],'','', table[7][i], sep="\t")
-        else:
-            print(table[0][i], '', '', table[1][i], '', '', table[2][i], '', table[3][i], '', table[4][i], '', table[5][i],'', table[6][i],'', table[7][i],sep="\t")    
-        
-
+    print(tabulate(tabella, headers= ["n_nodi originali", "n_archi originali", "peso prim", "peso kruskal", "peso_kruskal_naive", "tempo Prim", "tempo Kruskal", "tempo Kruskal naive", "algoritmo migliore"], tablefmt='pretty'))
 
  
     
