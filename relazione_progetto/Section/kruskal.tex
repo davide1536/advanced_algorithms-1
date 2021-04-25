@@ -30,17 +30,13 @@ L'algoritmo è implementato nel seguente modo:
 
 \begin{itemize}
     
-    \item viene definito un grafo \texttt{grafo} e inizializzato con gli stessi nodi del grafo \texttt{g} dato in input.
+    \item viene definito un grafo \texttt{grafo} e inizializzato con gli stessi nodi del grafo \texttt{g} dato in input;
     
     \item attraverso l'operazione MakeSet viene creato un albero per ogni nodo del grafo;
     
     \item utilizzando l'algoritmo di MergeSort\_weight viene ordinata la lista degli archi del grafo in maniera crescente rispetto al peso;
     
-    \item per ogni arco si controlla, risalendo alla radice (attraverso la funzione FindSet(nodo)), se gli insiemi dei suoi nodi coincidono. Se le radici dei nodi sono diverse si giunge alla conclusione che le due componenti sono distinte e quindi l'arco può essere aggiunto al grafo \texttt{grafo}, in quanto non crea un ciclo. 
+    \item per ogni arco si controlla, risalendo alla radice (attraverso la funzione FindSet(nodo)), se gli insiemi dei suoi nodi coincidono. Se le radici dei nodi sono diverse si giunge alla conclusione che le due componenti sono distinte e quindi l'arco può essere aggiunto al grafo \texttt{grafo}, in quanto non crea un ciclo;
     
     \item nel caso in cui l'arco venga aggiunto al grafo \texttt{grafo}, si aggiornano gli insiemi attraverso l'operazione di Union.
 \end{itemize}
-
-
-\subsection{Complessità}
-\label{complessità}

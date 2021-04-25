@@ -33,10 +33,9 @@ Questo algoritmo è stato implementato nel seguente modo:
     \item è stata inizializzata una struttura heap a cui è stato passato come paramentro la lista dei nodi del grafo \texttt{g} dato in input;
     \item utilizzando il metodo \hyperlink{buildminheap}{\textsc{BuildMinHeap()}} è stato realizzato un min-heap;
     \item viene iterato lo heap e, grazie al metodo \hyperlink{heapextractmin}{\textsc{HeapExtractMin()}} , viene estratto il nodo con campo key minimo;
-    \item Viene salvato il suo valore key in modo da salvare il peso totale dell'albero una volta terminato l'algoritmo.
-    \item per ogni arco nella lista di adiacenza del nodo estratto  viene controllato se il nodo adiacente è nell heap e se il peso dell'arco tra i due è minore del valore del campo key del nodo considerato. Se il risultato è positivo si procede con l'aggiornamento dei campi, utilizzando . \hyperlink{heapdecreasekey}{\textsc{HeapDecreaseKey()}}
+    \item viene salvato il suo valore key in modo da salvare il peso totale dell'albero una volta terminato l'algoritmo;
+    \item per ogni arco nella lista di adiacenza del nodo estratto  viene controllato se il nodo adiacente è nell heap e se il peso dell'arco tra i due è minore del valore del campo key del nodo considerato. Se il risultato è positivo si procede con l'aggiornamento dei campi, utilizzando \hyperlink{heapdecreasekey}{\textsc{HeapDecreaseKey()}}.
 
-Dato che \textsc{HeapDecreaseKey()} richiede in input la posizione del nodo che si vuole aggiornare, la prima implementazione è stata utilizzando la funzione python index() ma, andando ad analizzare successivamente la complessità di Prim essa non corrispondeva alla complessità teorica di $O(m log{} n)$. Quindi è stato aggiundo un ulteriore campo \textsc{heapIndex} alla classe node per tenere traccia degli indici dei nodi all'interno dell heap e riducendo così la complessità di recucpero dell'indice da $O(n)$ a $O(1)$
+Dato che \textsc{HeapDecreaseKey()} richiede in input la posizione del nodo che si vuole aggiornare, la prima implementazione è stata utilizzando la funzione python index() ma, andando ad analizzare successivamente la complessità di Prim essa non corrispondeva alla complessità teorica di $O(m log{} n)$. Quindi è stato aggiundo un ulteriore campo \textsc{heapIndex} alla classe node per tenere traccia degli indici dei nodi all'interno dell heap e riducendo così la complessità di recucpero dell'indice da $O(n)$ a $O(1)$.
 
 \end{itemize}
-\label{complessità}

@@ -1,5 +1,5 @@
 \documentclass[a4paper, titlepage]{article}
-\usepackage{color}
+\usepackage[table]{xcolor}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[italian]{babel}
@@ -17,43 +17,38 @@
 \usepackage[labelfont=bf, font=scriptsize]{caption}
 \usepackage[italian]{varioref}
 \usepackage[suftesi]{frontespizio}
+\usepackage{color}
 \usepackage{tikz}
 \usepackage{caption}
-\usepackage{pgfplots}
 \usepackage{comment}
 \usepackage{lipsum}
 \usepackage{hyperref}
 \usepackage{graphicx}
 
-
-\hypersetup{
-    colorlinks = true,
-    linkcolor = red
-    }
-
-\pgfplotsset{compat=1.16}
+%\usepackage{pgfplots}
+\usepackage{comment}
+\usepackage{lipsum}
+\usepackage{longtable}
+%\pgfplotsset{compat=1.16}
 
 %%% Il documento vero e proprio %%%
 \begin{document}
-\begin{figure}[]
-\centerline{\includegraphics[scale = 0.5]{Fig/logo_unipd}}
-\label{fig}
-\end{figure}
+
 %%% Frontespizio %%%
 \begin{frontespizio}
 \Universita{Padova} 
-
+\Logo{Fig/logo_unipd} 
 \Dipartimento{Matematica}
-\Corso[Laurea Magistrale]{Informatica}
+\Corso[Laurea Magistrale]{Informatica} 
 
 \Annoaccademico{2020-2021}
 \Titoletto{Algoritmi Avanzati \\ Relazione di laboratorio 1}
 \Titolo{Minimum Spanning Tree}
 \Sottotitolo{Aprile 2021}
 \NCandidati{Gruppo di lavoro} 
-\Candidato[Inserire Matricola]{Sofia Bononi}
-\Candidato[Inserire Matricola]{Nome Cognome}
-\Candidato[Inserire Matricola]{Nome Cognome}
+\Candidato[2029254]{Sofia Bononi}
+\Candidato[2022146]{Davide Franzoso}
+\Candidato[2029214]{Matteo Mariani}
 \end{frontespizio}
 
 %%% Indice %%%
@@ -71,10 +66,8 @@
 \newpage
 \input{Section/kruskal.tex}
 \newpage
-\input{Section/performance}
+\input{Section/performance.tex}
 \newpage
-\input{Section/correttezza.tex}
-%\newpage
 %\input{Section/risultati.tex}
 %\newpage
 %\input{Section/conclusione.tex}
