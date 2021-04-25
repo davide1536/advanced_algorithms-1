@@ -127,6 +127,19 @@ def findSet(g, nodo1):
 
 ################################## Funzioni di Test ##################################
 
+
+def test_tot_pesi(prim, kruskal, kruskal_naive):
+    i = 0
+    while i < len(prim):
+        res = prim[i].totPeso == kruskal[i].totPeso == kruskal_naive[i].totPeso
+        if not res:
+            return False
+        i+=1
+    print("Tutti i grafi risultanti hanno peso uguale")
+    return True
+
+
+
 # controllo se l'mst risultante è un albero di supporto
 # conto i nodi che visito
 # n_nodi = numero di nodi visitati
@@ -161,7 +174,7 @@ def test_albero_supporto(lista_grafi):
     return res
 
 
-def test_total(prim, kruskal_naive, kruskal):
+def test_total_supporto(prim, kruskal_naive, kruskal):
 
     rand = random.randint(0,1)
     if rand == 0: 
@@ -192,30 +205,10 @@ def test_total(prim, kruskal_naive, kruskal):
         print("ERRORE "*300000000)
 
 
-#funzione per stabilire l'algoritmo più veloce per ogni classe di grafo
-def test_times(times, graphs):
-    algorithms = ["prim", "Kruskal", "NaiveKruskal"]
-    times.append(algorithms)
-    print(times)
-    for i in range(len(graphs.keys())-1):
-
-        prim = times[0][i]
-        kruskal = times[1][i]
-        kruskal_n = times[2][i]
-        minmin = min(prim, kruskal, kruskal_n)
-        if minmin == prim:
-            print("per istanze di dimensionalità: ", list(graphs.keys())[i], "mediamente il più veloce è prim")
-        
-        elif minmin == kruskal: 
-            print("per istanze di dimensionalità: ", list(graphs.keys())[i], "mediamente il più veloce è kruskal")
-
-        else: 
-            print("per istanze di dimensionalità: ", list(graphs.keys())[i], "mediamente il più veloce è kruskal-naive")
-
 
 #funzione min per confronti a 3 
 # list = [tempo_prim, tempo_kruskal, tempo_kruskal_naive]
-def min_reload(list):
+def min_reloaded(list):
     algo = ""
     min = 0
     if list[0] < list[1]:
@@ -254,7 +247,7 @@ def output_peso(prim, kruskal, kruskal_naive, lista_grafi_originale, p_t, k_t, k
     
     tabella = []
     for i in range(len(lista_grafi_originale)):
-        tabella.append([table[0][i], table[1][i], table[2][i], table[3][i], table[4][i], table[5][i], table[6][i], table[7][i], min_reload([table[5][i], table[6][i], table[7][i]])])
+        tabella.append([table[0][i], table[1][i], table[2][i], table[3][i], table[4][i], table[5][i], table[6][i], table[7][i], min_reloaded([table[5][i], table[6][i], table[7][i]])])
 
     print()
     print(tabulate(tabella, headers= ["n_nodi originali", "n_archi originali", "peso prim", "peso kruskal", "peso_kruskal_naive", "tempo Prim", "tempo Kruskal", "tempo Kruskal naive", "algoritmo migliore"], tablefmt='pretty'))

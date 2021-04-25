@@ -2,7 +2,7 @@ from Grafo import Grafo
 from Nodo import Nodo
 from Arco import Arco
 from heap import heap, HeapDecreaseKey, HeapExtractMin, HeapMinimum, BuildMinHeap, isIn
-from Utility import merge, mergeSort_weight, inizializzaGrafo, dfs_ciclo, findSet, union, makeSet, test_albero_supporto, test_total, test_times, output_peso
+from Utility import merge, mergeSort_weight, inizializzaGrafo, dfs_ciclo, findSet, union, makeSet, test_albero_supporto, test_total_supporto, output_peso, test_tot_pesi
 import random
 import os
 import math
@@ -382,13 +382,13 @@ graphs_groupped,times = plot_graph()
 
 
 
-#test_total(p_g, kn_g, k_g)
+test_total_supporto(p_g, kn_g, k_g)
 
 output_peso(p_g, k_g, kn_g, lista_grafi, p_t, k_t, kn_t)
 
-#test_times(times, graphs_groupped)
 
 
+test_tot_pesi(p_g, k_g, kn_g)
 
 
 

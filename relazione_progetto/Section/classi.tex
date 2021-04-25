@@ -71,10 +71,11 @@ La classe \textit{Utility} contiene le funzioni di servizio per implementare i t
     
     \item \hypertarget{dfsciclo}{\textbf{\textsc{dfs\_ciclo(g, u, padri, visitati)}}}: metodo utilizzato per la ricerca di cicli nell'algoritmo \hyperlink{section.4}{\textsc{Kruskal-naive}}. La funzione prende in input un grafo da analizzare, un nodo di partenza, un vettore dei padri e un vettore dei visitati (inizializzati a 0). Viene eseguita una visita DFS de grafo e ad ogni iterazione viene visitato un nodo e ricorsivamente tutti i suoi vicini impostando ad 1 il vettore dei visitati e costruendo il vettore dei padri, se si incontra un nodo già visitato (ad eccezione del padre) la funzione restituisce True, poichè è stato trovato un ciclo nel grafo;
     
-    \item \hypertarget{dfssupporto}{\textbf{\textsc{dfs\_supporto(g, u, n\_nodi, visitati)}}}: 
+    \item \hypertarget{dfssupporto}{\textbf{\textsc{dfs\_supporto(g, u, n\_nodi, visitati)}}}: metodo utilizzato per testare la correttezza dei risultati ottenuti, si rimanda alla  \hyperlink{section.6}{Sezione Correttezza};
     
-    \item \hypertarget{testalberosupporto}{\textbf{\textsc{test\_albero\_supporto(lista\_grafi)}}}: 
+    \item \hypertarget{testalberosupporto}{\textbf{\textsc{test\_albero\_supporto(lista\_grafi)}}}: metodo utilizzato per testare la correttezza, si rimanda alla \hyperlink{section.6}{Sezione Correttezza};
     
+    \item \textbf{\textsc{output\_peso(prim, kruskal, kruskal\_naive, lista\_grafi\_originale, p\_t, k\_t, kn\_t)}}: metodo utilizzato per stamprare a schermo tutti i risultati ottenuti, sulla base dell'outuput di questo metodo sono state composte le tabelle nella \hyperlink{section.8}{Sezione Conclusioni}.
     
 \end{itemize} 
 
