@@ -18,10 +18,10 @@ L'algoritmo di Prim ha una complessità teorica di $O(mlogn)$, perciò ci aspett
     \label{Prim}
 \end{figure}
 
-
+\newpage
 
 \subsection{Kruskal}
-Anche kruskal, come Prim, ha una complessità di $O(mlogn)$
+Anche Kruskal, come Prim, ha una complessità di $O(mlogn)$.
 
 \begin{figure}[htbp]
     \centering
@@ -36,8 +36,8 @@ Per quanto riguarda la versione non ottimizzata dell'algoritmo di Kruskal, cioè
 
 Per la versione naive di Kruskal è stata fatta una piccola miglioria. L' algoritmo termina se:
 \begin{itemize}
-    \item sono stati scorsi tutti i lati del grafo
-    \item è stato aggiunto al grafo di copertura minimo n-1 archi, in questo caso termina l'esecuzione.
+    \item sono stati scorsi tutti i lati del grafo, oppure;
+    \item sono stati aggiunti al grafo di copertura minimo n-1 archi, in questo caso viene interrotta l'esecuzione.
 \end{itemize}
 Dato che la maggior parte dei grafi testati mediamente aveva un numero maggiore di archi rispetto al numero di nodi, grazie alla seconda condizione la costante nascosta all'interno dell'algoritmo si è abbassata. 
 
@@ -49,7 +49,7 @@ Dato che la maggior parte dei grafi testati mediamente aveva un numero maggiore 
 \end{figure}
 
 
-Come si può notare dai grafici, la curva dei tempi di Prim, Kruskal e Kruskal naive (arancione) va quasi a sovrapporsi ai grafici teorici(blu) moltiplicati per la costante calcolata di ogni algoritmo, questo conferma che l'implementazione rispetta la complessità teorica degli algoritmi.
+Come si può notare dai grafici, la curva dei tempi di Prim, Kruskal e Kruskal naive (arancione) va quasi a sovrapporsi ai grafici teorici (blu) moltiplicati per la costante calcolata di ogni algoritmo, questo conferma che l'implementazione rispetta la complessità teorica degli algoritmi.
 
 \newpage
 \subsection{Risultati numerici}
@@ -58,9 +58,15 @@ Di seguito sono riportate le tabelle con i tempi utilizzati per la costruzione d
 
 \rowcolors{2}{white!80!lightgray!90}{white}
 \renewcommand{\arraystretch}{2}
-\begin{longtable}[H]{|p{2cm}|p{2cm}|p{3cm}|p{3cm}|p{3cm}|} 
-\hline
-
+\begin{longtable}[H]{|p{2cm}|p{3cm}|p{2cm}|p{3cm}|} 
+\rowcolor{white}
+\multicolumn{4}{c}{Continua alla pagina seguente...}
+\endfoot
+\rowcolor{white}
+\caption{tabella riassuntiva di Prim}
+\label{tab:tabellaPrim}
+\endlastfoot
+    \hline
     \rowcolor{lightgray}
     \textbf{n\_nodi} & \textbf{times} & \textbf{costant} & \textbf{ratio}\\ \hline\hline  \endhead
     10	&	38.0	&		1.535	&	None \\ \hline
@@ -79,14 +85,22 @@ Di seguito sono riportate le tabelle con i tempi utilizzati per la costruzione d
     20000 &	473662.0 &		1.791 &		2.381 \\ \hline
     40000 &	999872.0 &		1.768 &		2.111 \\ \hline
     80000 &	2184898.0 &		1.814 &		2.185 \\ \hline
-    100000 &	2753401.0 &	1.793 &		1.26  \hline
-    
-    \caption{tabella riassuntiva di Prim}
+    100000 &	2753401.0 &	1.793 &		1.26 \\ \hline
 \end{longtable}
+
+\newpage
 
 \rowcolors{2}{white!80!lightgray!90}{white}
 \renewcommand{\arraystretch}{2}
-\begin{longtable}[H]{|p{2cm}|p{2cm}|p{3cm}|p{3cm}|p{3cm}|} \hline
+\begin{longtable}[H]{|p{2cm}|p{3cm}|p{2cm}|p{3cm}|} 
+    \rowcolor{white}
+\multicolumn{4}{c}{Continua alla pagina seguente...}
+\endfoot
+\rowcolor{white}
+\caption{tabella riassuntiva di Kruskal}
+\label{tab:tabellaKruskal}
+\endlastfoot
+\hline
     \rowcolor{lightgray}
     \textbf{n\_nodi} & \textbf{times} & \textbf{costant} & \textbf{ratio} \\ \hline\hline
     \endhead
@@ -106,14 +120,21 @@ Di seguito sono riportate le tabelle con i tempi utilizzati per la costruzione d
     20000 &		244539.0 &		0.924 &		2.129 \\ \hline
     40000 &		537266.0 &		0.95 &		2.197 \\ \hline
     80000 &		1176867.0 &		0.977 &	    2.19 \\ \hline
-    100000 &	1532773.0 &		0.998 &	    1.302 \hline
-    \caption{tabella riassuntiva di Kruskal}
+    100000 &	1532773.0 &		0.998 &	    1.302 \\ \hline
 \end{longtable}
 
 \newpage
 \rowcolors{2}{white!80!lightgray!90}{white}
 \renewcommand{\arraystretch}{2}
-\begin{longtable}[H]{|p{2cm}|p{2cm}|p{3cm}|p{3cm}|p{3cm}|} \hline
+\begin{longtable}[H]{|p{2cm}|p{3cm}|p{2cm}|p{3cm}|} 
+    \rowcolor{white}
+\multicolumn{4}{c}{Continua alla pagina seguente...}
+\endfoot
+\rowcolor{white}
+\caption{tabella riassuntiva di Kruskal naive}
+\label{tab:tabellaKriskalNaive}
+\endlastfoot
+\hline
     \rowcolor{lightgray}
     \textbf{n\_nodi} & \textbf{times} & \textbf{costant} & \textbf{ratio} \\ \hline\hline
     \endhead
@@ -133,8 +154,7 @@ Di seguito sono riportate le tabelle con i tempi utilizzati per la costruzione d
     20000 &	132740246.0	&	0.248 &		4.728 \\ \hline
     40000 &	589607712.0	&	0.276 &		4.442 \\ \hline
     80000 &	2501403023.0 &	0.293 &		4.242 \\ \hline
-    100000 &	4075177518.0 &	0.305 &		1.629  \hline
-    \caption{tabella riassuntiva di Kruskal naive}
+    100000 &	4075177518.0 &	0.305 &		1.629 \\ \hline
 \end{longtable}
 
 Come si può notare dalle tabelle che riassumono i risultati per ogni algoritmo, anche il ratio calcolato corrisponde a quello voluto. Infatti per quanto riguarda il ratio di Prim e Kruskal ($\sim 2,2$) \footnote{il ratio considerato, così come la costante per calcolare il grafico teorica, è quello corrispondente all'ultima istanza (100000)} sono quasi equivalenti e corrispondono al ratio teorico $2m*log(2n) / m*log(n)$.

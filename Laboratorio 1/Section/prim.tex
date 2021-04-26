@@ -1,0 +1,41 @@
+\section{Algoritmo di Prim}
+\label{Prim1}
+
+L'algoritmo di Prim, dato un grafo G = (V,E) ed un nodo di partenza s, costruisce un MST, partendo da un albero A (con un singolo nodo) e aggiungendo, ad ogni passo, un light edge a lui collegato che sia sicuro\footnote{Un lato si dice sicuro se, la sua aggiunta, conserva l'invariante per cui: prima di ogni iterazione, A è un sottoinsieme di qualche albero di connessione minimo.} per A.
+
+\subsection{Strutture dati}
+\label{struttureDati1}
+
+Le strutture dati utilizzate per implementare questo algoritmo sono:
+
+\begin{itemize}
+    \item classe \hyperlink{subsection.2.2}{Grafo};
+    \item classe \hyperlink{subsection.2.1}{Arco};
+    \item classe \hyperlink{subsection.2.5}{Heap}:
+    \begin{itemize}
+        \item metodo BuildMinHeap(h);
+        \item metodo isIn(v);
+        \item metodo HeapDecreaseKey(h, i, key).
+    \end{itemize}
+\end{itemize}
+
+La descrizione si piò trovare alla sezione \textsc{1.2 Classi}.
+
+\subsection{Implementazione}
+\label{implementazione1}
+
+Questo algoritmo è stato implementato nel seguente modo:
+
+\begin{itemize}
+    \item viene inizializzata la lista di nodi;
+    \item al campo key di ogni nodo viene assegnato il valore infinito;
+    \item al campo key del nodo radice, dato in input, viene assegnato il valore 0;
+    \item viene inizializzata una struttura heap a cui si passa come paramentro la lista dei nodi del grafo \texttt{g} dato in input;
+    \item utilizzando il metodo \hyperlink{buildminheap}{\textsc{BuildMinHeap()}} viene realizzato un min-heap;
+    \item viene iterato lo heap e, grazie al metodo \hyperlink{heapextractmin}{\textsc{HeapExtractMin()}}, viene estratto il nodo con campo key minimo;
+    \item viene salvato il suo valore key in modo da salvare il peso totale dell'albero una volta terminato l'algoritmo;
+    \item per ogni arco nella lista di adiacenza del nodo estratto viene controllato se il nodo adiacente è nell'heap e se il peso dell'arco tra i due è minore del valore del campo key del nodo considerato. Se il risultato è positivo si procede con l'aggiornamento dei campi, utilizzando \hyperlink{heapdecreasekey}{\textsc{HeapDecreaseKey()}}.
+
+Dato che \textsc{HeapDecreaseKey()} richiede in input la posizione del nodo che si vuole aggiornare, la prima implementazione è stata utilizzando la funzione python index() ma, andando ad analizzare successivamente la complessità di Prim essa non corrispondeva alla complessità teorica di $O(m log{} n)$. Quindi è stato aggiundo un ulteriore campo \textsc{heapIndex} alla classe node per tenere traccia degli indici dei nodi all'interno dello heap e riducendo così la complessità di recucpero dell'indice da $O(n)$ a $O(1)$.
+
+\end{itemize}

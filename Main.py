@@ -23,22 +23,21 @@ k_g = []
 #lista grafi kruskal naive
 kn_g = []
 
+#lista dei tempi di prim
 p_t = [] 
+#lista dei tempi di kruskal
 k_t = []
+#lista dei tempi di kruakl naive
 kn_t = []
 
-#per_m = "algoritmi-avanzati-laboratorio/"
-per_m = ""
-#togliere per_m
-directory = per_m+"mst_dataset/"
+
+directory = "mst_dataset/"
 lista_grafi = []
-singleTimes = []
 
 
 
 def parsing(directory):
     for file in os.listdir(directory):
-        if not (file.endswith("100000.txt") or file.endswith("80000.txt") or file.endswith("40000.txt") or file.endswith("20000.txt") or file.endswith("10000.txt") or file.endswith("8000.txt") ):
             crea_grafi(file)
 
 
@@ -55,7 +54,7 @@ def crea_grafi(path):
     lista_adiacenza = {}
     lista_adiacenza_nodi = {}
     
-    f = open(per_m+"mst_dataset/" + path, "r")
+    f = open("mst_dataset/" + path, "r")
 
     #assegno i valori numero nodi e numero archi
     prima_riga = f.readline().split(" ")
@@ -377,16 +376,12 @@ def kruskal(g):
 parsing(directory)
 
 lista_grafi = sorted(lista_grafi, key=lambda grafo: (grafo.n_nodi, grafo.n_archi))
-print(len(lista_grafi))
+
 graphs_groupped,times = plot_graph()
-
-
 
 test_total_supporto(p_g, kn_g, k_g)
 
 output_peso(p_g, k_g, kn_g, lista_grafi, p_t, k_t, kn_t)
-
-
 
 test_tot_pesi(p_g, k_g, kn_g)
 

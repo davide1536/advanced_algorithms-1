@@ -48,10 +48,10 @@ L'oggetto \textit{Nodo} contiene le informazioni relative ad un nodo:
 \begin{itemize}
     \item \textbf{nodo}: Intero identificativo del nodo;
     \item \textbf{padre}: Intero che identifica il padre v di un nodo u nell'albero di copertura minimo;
-    \item \textbf{key}: Campo utilizzato per costruire il min heap, inizializzato con il peso dell'arco adiacente al nodo. Ad esempio il campo key del nodo \emph{u} sarà inizializzato con il valore \emph{w(u,v)};
-    \item \hypertarget{inh}{\textbf{in\_h}}: Intero per verificare se un nodo è stato estratto dall'heap o meno;
-    \item \textbf{vis}: intero per verificare se un nodo è stato visitato o meno nella procedura dfs;
-    \item \textbf{heapIndex}: indice utilizzato per tenere traccia della posizione di ogni nodo all'interno dell'heap.
+    \item \textbf{size}: intero utilizzato per la struttura union-find;
+    \item \textbf{key}: Campo utilizzato per costruire il min-heap, inizializzato con il peso dell'arco adiacente al nodo. Ad esempio il campo key del nodo \emph{u} sarà inizializzato con il valore \emph{w(u,v)};
+    \item \hypertarget{inh}{\textbf{in\_h}}: Intero per verificare se un nodo è stato estratto dallo heap o meno;
+    \item \textbf{heapIndex}: indice utilizzato per tenere traccia della posizione di ogni nodo all'interno dellp heap.
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -113,9 +113,9 @@ Per implementare l'algoritmo è stato realizzato un \textit{min-heap}, uno heap 
     \item \hypertarget{buildminheap}{\textbf{\textsc{BuildMinHeap(h)}}}: metodo che dato in input l'oggetto heap, costruisce un \textit{min-heap};
     \item \hypertarget{minheapify}{\textbf{\textsc{MinHeapify(h, i)}}}: metodo che dato in input un vettore e un nodo, sistema il nodo nella posizione corretta;
     \item \hypertarget{heapdecreasekey}{\textbf{\textsc{HeapDecreaseKey(h, i ,key)}}}: metodo che dato in input uno heap, un indice ed una nuova chiave, sostituisce il valore del vettore associato all'indice i con il nuovo valore key;
-    \item \hypertarget{heapminimum}{\textbf{\textsc{HeapMinimum(h)}}}: metodo che dato in input un heap, restituisce il valore minimo dello heap, ossia la radice;
-    \item \hypertarget{heapextractmin}{\textbf{\textsc{HeapExtractMin(h)}}}: metodo che dato in input un heap, trova l'elemento più piccolo, lo rimuove e ritorna l'oggetto;
-    \item \hypertarget{isin}{\textbf{\textsc{isIn(h, v)}}}: metodo che, dato in input un nodo, restituisce 1 se esso è presente nell'heap, 0 altrimenti. Per rendere questa operazione di tempo costante è stata aggiunto un attributo \hyperlink{inh}{\textit{in\_h}} ad ogni nodo;
+    \item \hypertarget{heapminimum}{\textbf{\textsc{HeapMinimum(h)}}}: metodo che dato in input uno heap, restituisce il valore minimo dello heap, ossia la radice;
+    \item \hypertarget{heapextractmin}{\textbf{\textsc{HeapExtractMin(h)}}}: metodo che dato in input uno heap, trova l'elemento più piccolo, lo rimuove e ritorna l'oggetto;
+    \item \hypertarget{isin}{\textbf{\textsc{isIn(h, v)}}}: metodo che, dato in input un nodo, restituisce 1 se esso è presente nello heap, 0 altrimenti. Per rendere questa operazione di tempo costante è stata aggiunto un attributo \hyperlink{inh}{\textit{in\_h}} ad ogni nodo;
     \item \hypertarget{right}{\textbf{\textsc{right(index)}}}: metodo che, dato in input un indice di un nodo, restituisce l'indice del nodo figlio destro;
     \item \hypertarget{left}{\textbf{\textsc{left(index)}}}: metodo che, dato in input un indice di un nodo, restituisce l'indice del nodo figlio sinistro;
     \item \hypertarget{parent}{\textbf{\textsc{parent(index)}}}:metodo che, dato in input un indice di un nodo, restituisce l'indice del padre.
@@ -141,7 +141,12 @@ La classe \textit{Main} contiene il dataset dei grafi dopo l'esecuzione del pars
     
     \item \textbf{kn\_g}: vettore contenente i grafi risultanti dall'esecuzione dell'algoritmo \texttt{Kruskal-Naive};
     
+    \item \textbf{p\_t}: vettore contenente i tempi necessari per l'esecuzione dell'algoritmo \texttt{Prim};
     
+    \item \textbf{k\_t}: vettore contenente i tempi necessari per l'esecuzione dell'algoritmo \texttt{Kruskal-UnionFind};
+    
+    \item \textbf{kn\_t}: vettore contenente i tempi necessari per l'esecuzione dell'algoritmo \texttt{Kruskal-Naive};
+
     \item \hypertarget{parsing}{\textbf{\textsc{parsing(directory)}}}: funzione che, data in input una directory, analizza tutti i file interni e seleziona solo quelli con estensione .txt, fornendoli in input alla funzione \hyperlink{creagrafi}{crea\_grafi()};
     
     \item \hypertarget{creagrafi}{\textbf{\textsc{crea\_grafi(file)}}}: funzione che, dato in input un file, lo legge ed estrae le informazioni per la creazione di oggetti Grafo, Nodo e Arco;

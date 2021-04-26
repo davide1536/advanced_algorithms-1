@@ -1,35 +1,40 @@
 \section{Conclusioni}
 \label{conlusioni}
 
-Dal grafico in figura 4, e soprattutto dal grafico in figura 5, si può notare che generalmente Kruskal è più veloce rispetto a Prim in quasi tutte le istanze, e quindi quasi sempre più efficiente. Questo è dovuto al fatto che Kruskal ha in genere una costante nascosta più piccola rispetto a Prim, come si può notare nella tabella 1 e 2.
-Anche se questo non è vero per tutte le istanze, infatti Prim si comporta leggermente meglio con le istanze di bassa dimensionalità (n\_nodi <= 20)
+Dal grafico in Figura 4, e soprattutto dal grafico in Figura 5, si può notare che generalmente Kruskal è più veloce rispetto a Prim in quasi tutte le istanze, e quindi quasi sempre più efficiente. Questo è dovuto al fatto che Kruskal ha in genere una costante nascosta più piccola rispetto a Prim, come si può notare nella tabella 1 e 2.
+Anche se questo non è vero per tutte le istanze, infatti Prim si comporta leggermente meglio con le istanze di bassa dimensionalità (n\_nodi <= 20).
 
 \begin{figure}[htbp]
     \centering
     \centerline{\includegraphics[scale = 0.38]{Fig/graficiRelazione.png}}
     \caption{grafico che mostra il confronto tra i 3 algoritmi: Naive Kruskal(verde), Kruskal(arancione), Prim(blu). Come si può notare dal grafico in figura 4, Kruskal naive cresce molto più velocemnte rispetto a Prim e Kruskal}
-    \label{Kruskal naive}
 \end{figure}
 
 \newpage
+
 \begin{figure}[htbp]
     \centering
     \centerline{\includegraphics[scale = 0.38]{Fig/primkruskalrelazione.png}}
     \caption{grafico che mostra il confronto tra Prim(blu) e Kruskal(arancione)}
-    \label{Kruskal naive}
 \end{figure}
 
 \newpage
 
 \subsection{Tabella pesi}
-\label{tabella\_pesi}
+\label{tabellaPesi}
 
 Di seguito viene riportata la tabella del calcolo dei pesi per ogni istanza divisi in base agli algoritmi. È possibile notare l'uguaglianza tra i pesi risultanti.
 Con n\_nodi e n\_archi ci si riferisce al numero di nodi e al numero di archi del grafo originale, e non dell'albero di copertura minimo calcolato. 
 
 \rowcolors{2}{white!80!lightgray!90}{white}
 \renewcommand{\arraystretch}{2}
-\begin{longtable}[H]{|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{3cm}|p{3.5cm}|} \hline
+\begin{longtable}[H]{|p{1.5cm}|p{1.5cm}|p{2cm}|p{3cm}|p{4cm}|} 
+    \rowcolor{white}
+    \multicolumn{5}{c}{Continua alla pagina seguente...}
+    \endfoot
+    \rowcolor{white}
+    \endlastfoot
+    \hline
     \rowcolor{lightgray}
     \textbf{n\_nodi} & \textbf{n\_archi} & \textbf{peso Prim} & \textbf{peso Kruskal} & \textbf{peso Kruskal naive} \\ \hline\hline
     \endhead
@@ -104,13 +109,19 @@ Con n\_nodi e n\_archi ci si riferisce al numero di nodi e al numero di archi de
 \end{longtable}
 \newpage
 \subsection{Tabella tempi}
-\label{tabella\_tempi}
-Di seguito invece è riportata la tabella con i tempi di esecuzione per ogni algoritmo e per ogni istanza. Si può notare come nelle prime istanze Prim performa meglio rispetto a Kruskal, anche se nelle istanze successiva ha sempre un tempo di esecuzione maggiore.
+\label{tabellaTempi}
+Di seguito invece è riportata la tabella con i tempi di esecuzione per ogni algoritmo e per ogni istanza. Si può notare come nelle prime istanze Prim performa meglio rispetto a Kruskal, mentre nelle istanze successive ha sempre un tempo di esecuzione maggiore.
 
 
 \rowcolors{2}{white!80!lightgray!90}{white}
 \renewcommand{\arraystretch}{2}
-\begin{longtable}[H]{|p{1.5cm}|p{1.5cm}|p{2cm}|p{2cm}|p{3cm}|p{3cm}|} \hline
+\begin{longtable}[H]{|p{1.5cm}|p{1.5cm}|p{2cm}|p{2cm}|p{3cm}|p{3cm}|} 
+    \rowcolor{white}
+    \multicolumn{6}{c}{Continua alla pagina seguente...}
+    \endfoot
+    \rowcolor{white}
+    \endlastfoot
+    \hline
     \rowcolor{lightgray}
     \textbf{n\_nodi} & \textbf{n\_archi} & \textbf{Prim} & \textbf{Kruskal} & \textbf{Kruskal naive} & \textbf{alg. migliore}\\ \hline\hline
     \endhead
